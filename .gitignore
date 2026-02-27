@@ -1,0 +1,9 @@
+.DS_Store
+**/.DS_Store
+**/.venv/
+**/__pycache__/
+**/*.pyc
+Spotify Account Data/
+Spotify Extended Streaming History/
+Spotify Technical Log Information/
+spotify-recommender/outputs/
