@@ -1,9 +1,9 @@
-# Spotify Recommender (Privacy-Safe Public Repo)
+# Spotify Recommender
 
 This repository contains a production-style ML project that predicts playback completion probability and ranks tracks for personalized recommendation.
 
-## For Reviewers at Spotify
-This project is intentionally structured to demonstrate:
+## Project Highlights
+This project is structured to demonstrate:
 - End-to-end ownership: ingestion, feature engineering, model training, evaluation, and recommendation outputs.
 - Product framing: optimize completion probability, not just offline model metrics.
 - Responsible data handling: no personal export data or generated personal outputs are published.
