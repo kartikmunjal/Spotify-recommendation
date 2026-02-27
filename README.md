@@ -6,6 +6,8 @@ This repository contains a production-style ML project that predicts playback co
 This project is structured to demonstrate:
 - End-to-end ownership: ingestion, feature engineering, model training, evaluation, and recommendation outputs.
 - Product framing: optimize completion probability, not just offline model metrics.
+- Multi-model evaluation with ranking metrics (`NDCG`, `MAP`, `Recall@K`).
+- Visualization of listening behavior and model score distributions.
 - Responsible data handling: no personal export data or generated personal outputs are published.
 
 ## Repository Contents

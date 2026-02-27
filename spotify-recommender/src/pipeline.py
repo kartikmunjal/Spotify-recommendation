@@ -1,7 +1,6 @@
 import argparse
 import csv
 import json
-import math
 from collections import defaultdict, deque
 from datetime import datetime
 from pathlib import Path
@@ -103,6 +102,7 @@ def load_technical_daily_counts(tech_dir: Path):
 
 def enrich_rows(rows, tech_daily):
     session_position = 0
+    session_id = 0
     prev_dt = None
     recent_skips = deque(maxlen=10)
 
@@ -110,10 +110,16 @@ def enrich_rows(rows, tech_daily):
         dt = r["dt"]
         if prev_dt is None:
             session_position = 0
+            session_id = 0
         else:
             gap = (dt - prev_dt).total_seconds() / 60.0
-            session_position = 0 if gap > 30 else session_position + 1
+            if gap > 30:
+                session_id += 1
+                session_position = 0
+            else:
+                session_position += 1
 
+        r["session_id"] = session_id
         r["hour"] = dt.hour
         r["day_of_week"] = dt.weekday()
         r["month"] = dt.month
@@ -172,42 +178,49 @@ def build_vocab(rows_train, cat_fields):
     return vocab
 
 
-def prepare_matrices(rows, rows_train, num_fields, cat_fields):
-    vocab = build_vocab(rows_train, cat_fields)
-
+def prepare_encoder(rows_train, num_fields, cat_fields):
     train_num = np.array([[float(r.get(f, 0.0)) for f in num_fields] for r in rows_train], dtype=float)
     mu = train_num.mean(axis=0)
     sigma = train_num.std(axis=0)
     sigma[sigma < EPS] = 1.0
 
+    vocab = build_vocab(rows_train, cat_fields)
     offsets = {}
     cur = len(num_fields)
     for field in cat_fields:
         offsets[field] = cur
         cur += len(vocab[field])
 
-    def encode(row_list):
-        n = len(row_list)
-        x = np.zeros((n, cur), dtype=float)
-        for i, r in enumerate(row_list):
-            for j, f in enumerate(num_fields):
-                x[i, j] = (float(r.get(f, 0.0)) - mu[j]) / sigma[j]
-            for f in cat_fields:
-                val = str(r.get(f, "unknown") or "unknown")
-                idx = vocab[f].get(val)
-                if idx is not None:
-                    x[i, offsets[f] + idx] = 1.0
-        y = np.array([int(r["target_completed"]) for r in row_list], dtype=float)
-        return x, y
-
     feature_names = list(num_fields)
     for f in cat_fields:
         inv = sorted(vocab[f].items(), key=lambda x: x[1])
         feature_names.extend([f"{f}={val}" for val, _ in inv])
 
-    x_train, y_train = encode(rows_train)
-    x_all, y_all = encode(rows)
-    return x_train, y_train, x_all, y_all, feature_names
+    return {
+        "num_fields": num_fields,
+        "cat_fields": cat_fields,
+        "mu": mu,
+        "sigma": sigma,
+        "vocab": vocab,
+        "offsets": offsets,
+        "dim": cur,
+        "feature_names": feature_names,
+    }
+
+
+def encode_rows(rows, encoder):
+    n = len(rows)
+    x = np.zeros((n, encoder["dim"]), dtype=float)
+    for i, r in enumerate(rows):
+        for j, f in enumerate(encoder["num_fields"]):
+            x[i, j] = (float(r.get(f, 0.0)) - encoder["mu"][j]) / encoder["sigma"][j]
+        for f in encoder["cat_fields"]:
+            val = str(r.get(f, "unknown") or "unknown")
+            idx = encoder["vocab"][f].get(val)
+            if idx is not None:
+                x[i, encoder["offsets"][f] + idx] = 1.0
+    y = np.array([int(r["target_completed"]) for r in rows], dtype=float)
+    return x, y
 
 
 def sigmoid(z):
@@ -308,6 +321,73 @@ def evaluate(y_true, y_prob, threshold=0.5):
     }
 
 
+def _dcg_at_k(labels, k):
+    val = 0.0
+    top = labels[:k]
+    for i, rel in enumerate(top, start=1):
+        gain = float(rel)
+        val += gain / np.log2(i + 1)
+    return val
+
+
+def _ndcg_at_k(labels, k):
+    ideal = sorted(labels, reverse=True)
+    denom = _dcg_at_k(ideal, k)
+    if denom <= EPS:
+        return 0.0
+    return _dcg_at_k(labels, k) / denom
+
+
+def _map_at_k(labels, k):
+    hits = 0.0
+    acc = 0.0
+    total_relevant = max(sum(labels), 1)
+    for i, rel in enumerate(labels[:k], start=1):
+        if rel == 1:
+            hits += 1
+            acc += hits / i
+    return acc / min(total_relevant, k)
+
+
+def _recall_at_k(labels, k):
+    total_relevant = sum(labels)
+    if total_relevant == 0:
+        return 0.0
+    return sum(labels[:k]) / total_relevant
+
+
+def ranking_metrics_by_session(rows, probs, ks=(5, 10), min_session_len=5):
+    buckets = defaultdict(list)
+    for r, p in zip(rows, probs):
+        buckets[r["session_id"]].append((float(p), int(r["target_completed"])))
+
+    metrics = {}
+    valid_sessions = 0
+    for k in ks:
+        metrics[f"ndcg@{k}"] = []
+        metrics[f"map@{k}"] = []
+        metrics[f"recall@{k}"] = []
+
+    for events in buckets.values():
+        if len(events) < min_session_len:
+            continue
+        events = sorted(events, key=lambda x: x[0], reverse=True)
+        labels = [rel for _, rel in events]
+        if sum(labels) == 0:
+            continue
+
+        valid_sessions += 1
+        for k in ks:
+            metrics[f"ndcg@{k}"].append(_ndcg_at_k(labels, k))
+            metrics[f"map@{k}"].append(_map_at_k(labels, k))
+            metrics[f"recall@{k}"].append(_recall_at_k(labels, k))
+
+    out = {"ranking_sessions_evaluated": valid_sessions}
+    for key, vals in metrics.items():
+        out[key] = float(np.mean(vals)) if vals else 0.0
+    return out
+
+
 def build_recommendations(rows, probs, library_tracks, top_n=100):
     track_stats = {}
     for r, p in zip(rows, probs):
@@ -378,6 +458,37 @@ def build_recommendations(rows, probs, library_tracks, top_n=100):
     return recs[:top_n]
 
 
+def build_heuristic_probs(rows):
+    probs = []
+    for r in rows:
+        p = 1.0 - (0.65 * r["track_train_skip_rate"] + 0.35 * r["artist_train_skip_rate"])
+        probs.append(float(np.clip(p, 0.0, 1.0)))
+    return np.array(probs, dtype=float)
+
+
+def train_and_score_model(rows_train, rows_test, rows_all, num_fields, cat_fields):
+    encoder = prepare_encoder(rows_train, num_fields, cat_fields)
+    x_train, y_train = encode_rows(rows_train, encoder)
+    x_test, y_test = encode_rows(rows_test, encoder)
+    x_all, _y_all = encode_rows(rows_all, encoder)
+
+    weights, bias = train_logistic_regression(x_train, y_train)
+    train_prob = predict_proba(x_train, weights, bias)
+    test_prob = predict_proba(x_test, weights, bias)
+    all_prob = predict_proba(x_all, weights, bias)
+
+    return {
+        "weights": weights,
+        "bias": bias,
+        "feature_names": encoder["feature_names"],
+        "train_prob": train_prob,
+        "test_prob": test_prob,
+        "all_prob": all_prob,
+        "y_train": y_train,
+        "y_test": y_test,
+    }
+
+
 def write_csv(path: Path, rows, headers):
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=headers)
@@ -386,12 +497,54 @@ def write_csv(path: Path, rows, headers):
             writer.writerow(r)
 
 
-def write_outputs(output_dir, identity, rows, probs, metrics, feature_names, weights, recs):
+def write_results_md(output_dir, identity, metrics, ranking_metrics, model_comparison, top_features):
+    name = identity.get("displayName", "Spotify User") if isinstance(identity, dict) else "Spotify User"
+    lines = [
+        "# Results",
+        "",
+        f"- Profile: {name}",
+        f"- Train rows: {metrics['train_rows']}",
+        f"- Test rows: {metrics['test_rows']}",
+        "",
+        "## Primary Model (Full Feature Set)",
+        f"- ROC-AUC: {metrics['test_auc']:.4f}",
+        f"- PR-AUC: {metrics['test_pr_auc']:.4f}",
+        f"- Accuracy: {metrics['test_accuracy']:.4f}",
+        f"- F1: {metrics['test_f1']:.4f}",
+        "",
+        "## Ranking Metrics (Session-Based)",
+        f"- Sessions evaluated: {ranking_metrics['ranking_sessions_evaluated']}",
+        f"- NDCG@5: {ranking_metrics['ndcg@5']:.4f}",
+        f"- MAP@5: {ranking_metrics['map@5']:.4f}",
+        f"- Recall@5: {ranking_metrics['recall@5']:.4f}",
+        f"- NDCG@10: {ranking_metrics['ndcg@10']:.4f}",
+        f"- MAP@10: {ranking_metrics['map@10']:.4f}",
+        f"- Recall@10: {ranking_metrics['recall@10']:.4f}",
+        "",
+        "## Model Comparison",
+    ]
+
+    for row in model_comparison:
+        lines.append(
+            f"- {row['model']}: AUC={row['test_auc']:.4f}, PR-AUC={row['test_pr_auc']:.4f}, "
+            f"Accuracy={row['test_accuracy']:.4f}, F1={row['test_f1']:.4f}"
+        )
+
+    lines.extend(["", "## Top Features (Absolute Coefficient)"])
+    for feat in top_features[:10]:
+        lines.append(f"- {feat['feature']}: {feat['coefficient']}")
+
+    (output_dir / "RESULTS.md").write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_outputs(output_dir, identity, rows, probs, metrics, feature_names, weights, recs, ranking_metrics, model_comparison):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     top_features = []
-    for name, w in sorted(zip(feature_names, weights), key=lambda x: abs(x[1]), reverse=True)[:100]:
-        top_features.append({"feature": name, "coefficient": round(float(w), 8), "abs_coefficient": round(abs(float(w)), 8)})
+    for name, weight in sorted(zip(feature_names, weights), key=lambda x: abs(x[1]), reverse=True)[:100]:
+        top_features.append(
+            {"feature": name, "coefficient": round(float(weight), 8), "abs_coefficient": round(abs(float(weight)), 8)}
+        )
     write_csv(output_dir / "feature_importance.csv", top_features, ["feature", "coefficient", "abs_coefficient"])
 
     write_csv(
@@ -408,6 +561,7 @@ def write_outputs(output_dir, identity, rows, probs, metrics, feature_names, wei
                 "uri": r["uri"],
                 "track_name": r["track_name"],
                 "artist": r["artist"],
+                "platform": r["platform"],
                 "target_completed": r["target_completed"],
                 "predicted_completion_prob": round(float(p), 6),
             }
@@ -415,11 +569,21 @@ def write_outputs(output_dir, identity, rows, probs, metrics, feature_names, wei
     write_csv(
         output_dir / "scored_samples.csv",
         scored_samples,
-        ["ts", "uri", "track_name", "artist", "target_completed", "predicted_completion_prob"],
+        ["ts", "uri", "track_name", "artist", "platform", "target_completed", "predicted_completion_prob"],
     )
 
+    full_metrics = metrics.copy()
+    full_metrics.update(ranking_metrics)
     with (output_dir / "model_metrics.json").open("w", encoding="utf-8") as f:
-        json.dump(metrics, f, indent=2)
+        json.dump(full_metrics, f, indent=2)
+
+    with (output_dir / "model_comparison.json").open("w", encoding="utf-8") as f:
+        json.dump(model_comparison, f, indent=2)
+    write_csv(
+        output_dir / "model_comparison.csv",
+        model_comparison,
+        ["model", "test_auc", "test_pr_auc", "test_accuracy", "test_f1", "test_logloss"],
+    )
 
     display_name = identity.get("displayName", "Spotify User") if isinstance(identity, dict) else "Spotify User"
     top10 = top_features[:10]
@@ -434,7 +598,7 @@ def write_outputs(output_dir, identity, rows, probs, metrics, feature_names, wei
         f"- PR-AUC: {metrics['test_pr_auc']:.4f}",
         f"- Accuracy: {metrics['test_accuracy']:.4f}",
         f"- F1 Score: {metrics['test_f1']:.4f}",
-        f"- Baseline completion rate: {metrics['base_completion_rate_test']:.4f}",
+        f"- NDCG@10: {ranking_metrics['ndcg@10']:.4f}",
         "",
         "## Top Drivers",
     ]
@@ -445,12 +609,14 @@ def write_outputs(output_dir, identity, rows, probs, metrics, feature_names, wei
         [
             "",
             "## Resume Bullets",
-            "- Built an end-to-end Spotify listening intelligence pipeline over multi-year streaming and client telemetry data (account export + extended history + technical logs).",
-            "- Trained a session-aware completion prediction model with chronological holdout validation and reported ROC-AUC/PR-AUC/F1 for production-style evaluation.",
-            "- Delivered a recommendation layer that ranks tracks by completion probability, producing playlist-ready artifacts and interpretable feature drivers.",
+            "- Built an end-to-end Spotify listening intelligence pipeline over multi-year streaming and client telemetry data.",
+            "- Trained and compared recommendation models with chronological holdout validation and ranking metrics (NDCG/MAP/Recall@K).",
+            "- Delivered a recommendation layer that ranks tracks by completion probability with interpretable feature drivers.",
         ]
     )
     (output_dir / "resume_project_summary.md").write_text("\n".join(summary_lines), encoding="utf-8")
+
+    write_results_md(output_dir, identity, metrics, ranking_metrics, model_comparison, top_features)
 
 
 def main():
@@ -474,7 +640,7 @@ def main():
     train_rows, test_rows = split_rows(rows, train_ratio=0.8)
     attach_train_priors(rows, train_rows)
 
-    num_fields = [
+    full_num_fields = [
         "ms_played",
         "hour",
         "day_of_week",
@@ -489,20 +655,52 @@ def main():
         "connection_error_count",
         "playback_error_count",
     ]
-    cat_fields = ["platform", "conn_country", "reason_start", "reason_end"]
+    full_cat_fields = ["platform", "conn_country", "reason_start", "reason_end"]
 
-    x_train, y_train, x_all, _y_all, feature_names = prepare_matrices(rows, train_rows, num_fields, cat_fields)
-    _x_train_ref, _y_train_ref, x_test, y_test, _feature_names_ref = prepare_matrices(
-        test_rows, train_rows, num_fields, cat_fields
-    )
+    baseline_num_fields = [
+        "ms_played",
+        "hour",
+        "day_of_week",
+        "month",
+        "is_weekend",
+        "session_position",
+        "recent_skip_rate_10",
+    ]
+    baseline_cat_fields = ["platform"]
 
-    weights, bias = train_logistic_regression(x_train, y_train)
+    full_model = train_and_score_model(train_rows, test_rows, rows, full_num_fields, full_cat_fields)
+    base_model = train_and_score_model(train_rows, test_rows, rows, baseline_num_fields, baseline_cat_fields)
 
-    train_prob = predict_proba(x_train, weights, bias)
-    test_prob = predict_proba(x_test, weights, bias)
-    all_prob = predict_proba(x_all, weights, bias)
+    y_train = full_model["y_train"]
+    y_test = full_model["y_test"]
 
-    test_eval = evaluate(y_test, test_prob)
+    test_eval = evaluate(y_test, full_model["test_prob"])
+    ranking_metrics = ranking_metrics_by_session(test_rows, full_model["test_prob"], ks=(5, 10), min_session_len=5)
+
+    def logloss(y, p):
+        p = np.clip(p, EPS, 1 - EPS)
+        return float(np.mean(-(y * np.log(p) + (1 - y) * np.log(1 - p))))
+
+    heuristic_test_probs = build_heuristic_probs(test_rows)
+
+    model_comparison = []
+    for model_name, probs in [
+        ("full_logistic", full_model["test_prob"]),
+        ("baseline_logistic", base_model["test_prob"]),
+        ("track_artist_heuristic", heuristic_test_probs),
+    ]:
+        ev = evaluate(y_test, probs)
+        model_comparison.append(
+            {
+                "model": model_name,
+                "test_auc": float(ev["auc"]),
+                "test_pr_auc": float(ev["pr_auc"]),
+                "test_accuracy": float(ev["accuracy"]),
+                "test_f1": float(ev["f1"]),
+                "test_logloss": logloss(y_test, probs),
+            }
+        )
+
     metrics = {
         "train_rows": len(train_rows),
         "test_rows": len(test_rows),
@@ -512,11 +710,23 @@ def main():
         "test_f1": test_eval["f1"],
         "base_completion_rate_test": float(np.mean(y_test)),
         "base_completion_rate_train": float(np.mean(y_train)),
-        "train_logloss": float(np.mean(-(y_train * np.log(np.clip(train_prob, EPS, 1 - EPS)) + (1 - y_train) * np.log(np.clip(1 - train_prob, EPS, 1 - EPS))))),
+        "train_logloss": logloss(y_train, full_model["train_prob"]),
+        "test_logloss": logloss(y_test, full_model["test_prob"]),
     }
 
-    recs = build_recommendations(rows, all_prob, library_tracks)
-    write_outputs(output_dir, identity, rows, all_prob, metrics, feature_names, weights, recs)
+    recs = build_recommendations(rows, full_model["all_prob"], library_tracks)
+    write_outputs(
+        output_dir,
+        identity,
+        rows,
+        full_model["all_prob"],
+        metrics,
+        full_model["feature_names"],
+        full_model["weights"],
+        recs,
+        ranking_metrics,
+        model_comparison,
+    )
 
     print("Pipeline completed.")
     print(f"Rows used: {len(rows)}")

@@ -32,6 +32,9 @@ The pipeline writes these to `outputs/` (ignored in git):
 - `top_resume_playlist.csv`
 - `scored_samples.csv`
 - `resume_project_summary.md`
+- `model_comparison.csv` and `model_comparison.json`
+- `RESULTS.md` (summary of classification + ranking metrics)
+- `figures/*.svg`, `figures/dashboard.html`, and `figures/visualization_summary.md`
 
 ## Run
 ```bash
@@ -41,6 +44,14 @@ python3 src/pipeline.py \
   --extended-dir "../Spotify Extended Streaming History" \
   --tech-dir "../Spotify Technical Log Information" \
   --output-dir "./outputs"
+```
+
+## Visualize
+```bash
+cd spotify-recommender
+python3 src/visualize.py \
+  --scored-samples "./outputs/scored_samples.csv" \
+  --out-dir "./outputs/figures"
 ```
 
 ## Repo Structure
