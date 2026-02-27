@@ -1,11 +1,11 @@
 # Spotify Recommender
 
-This project builds a resume-ready ML pipeline from your Spotify data export.
+This project builds a ML pipeline from my Spotify data export.
 
 ## Use Case
 Predict whether a track play will complete (not be skipped), then rank tracks by predicted completion probability to generate high-confidence playlist recommendations.
 
-Why this is strong for Spotify applications:
+Spotify applications:
 - Uses real Spotify export modalities: account data, extended streaming history, and technical client logs.
 - Demonstrates end-to-end ML lifecycle: ingestion, feature engineering, modeling, evaluation, and product-style output.
 - Produces measurable metrics and an artifact (`top_resume_playlist.csv`) that maps model output to user value.
