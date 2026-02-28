@@ -7,7 +7,8 @@ python src/pipeline.py \
   --tech-dir "../Spotify Technical Log Information" \
   --output-dir "./outputs" \
   --filter-primary-user true \
-  --primary-user-config "./primary_user_config.json"
+  --primary-user-config "./primary_user_config.json" \
+  --favorite-artists-config "./favorite_artists.json"
 
 # Optional visualization step (generates SVG charts + dashboard)
 python src/visualize.py \

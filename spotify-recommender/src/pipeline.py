@@ -188,6 +188,18 @@ def load_primary_user_config(path: Path):
     return out
 
 
+def load_favorite_artists(path: Path):
+    if not path.exists():
+        return []
+    data = load_json(path)
+    if not isinstance(data, dict):
+        return []
+    artists = data.get("artists", [])
+    if not isinstance(artists, list):
+        return []
+    return [str(a).strip() for a in artists if str(a).strip()]
+
+
 def build_primary_user_filter(rows, cfg):
     home_country = str(cfg["home_country"])
     primary_platforms = {str(x) for x in cfg["primary_platforms"]}
@@ -619,18 +631,72 @@ def build_recommendations(rows, probs, library_tracks, top_n=100):
     # Prefer recommendations with at least modest play evidence.
     evidence_recs = [r for r in recs if r["plays"] >= min_evidence_plays]
     evidence_recs.sort(key=lambda x: (x["score"], x["plays"]), reverse=True)
-    if len(evidence_recs) >= top_n:
+    if top_n is not None and len(evidence_recs) >= top_n:
         return evidence_recs[:top_n]
 
     recs.sort(key=lambda x: (x["score"], x["plays"]), reverse=True)
     seen = {r["uri"] for r in evidence_recs}
     for r in recs:
-        if len(evidence_recs) >= top_n:
+        if top_n is not None and len(evidence_recs) >= top_n:
             break
         if r["uri"] not in seen:
             evidence_recs.append(r)
             seen.add(r["uri"])
-    return evidence_recs[:top_n]
+    return evidence_recs if top_n is None else evidence_recs[:top_n]
+
+
+def build_favorites_playlist(
+    recs_all,
+    favorite_artists,
+    top_n=100,
+    per_artist_cap=8,
+    favorite_boost=0.06,
+    min_per_favorite=2,
+):
+    fav_set = {a.lower() for a in favorite_artists}
+    scored = []
+    for row in recs_all:
+        boosted = dict(row)
+        if row["artist"].strip().lower() in fav_set:
+            boosted["score"] = round(min(1.0, float(row["score"]) + favorite_boost), 6)
+            boosted["reason"] = "Favorite artist boost + strong model score"
+        scored.append(boosted)
+
+    scored.sort(key=lambda x: (x["score"], x["plays"]), reverse=True)
+    artist_counts = defaultdict(int)
+    selected_uris = set()
+    out = []
+
+    # Ensure favorite artists are represented when candidate tracks exist.
+    by_artist = defaultdict(list)
+    for row in scored:
+        by_artist[row["artist"].strip().lower()].append(row)
+
+    for fav in favorite_artists:
+        candidates = by_artist.get(fav.strip().lower(), [])
+        added = 0
+        for row in candidates:
+            if added >= min_per_favorite or len(out) >= top_n:
+                break
+            if artist_counts[row["artist"]] >= per_artist_cap or row["uri"] in selected_uris:
+                continue
+            out.append(row)
+            selected_uris.add(row["uri"])
+            artist_counts[row["artist"]] += 1
+            added += 1
+
+    for row in scored:
+        if row["uri"] in selected_uris:
+            continue
+        artist = row["artist"]
+        if artist_counts[artist] >= per_artist_cap:
+            continue
+        out.append(row)
+        selected_uris.add(row["uri"])
+        artist_counts[artist] += 1
+        if len(out) >= top_n:
+            break
+    return out
 
 
 def build_heuristic_probs(rows):
@@ -733,6 +799,7 @@ def write_outputs(
     attribution_summary,
     dataset_comparison,
     attribution_report_rows,
+    recs_favorites,
 ):
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -744,6 +811,22 @@ def write_outputs(
     write_csv(
         output_dir / "top_resume_playlist.csv",
         recs,
+        [
+            "uri",
+            "track_name",
+            "artist",
+            "plays",
+            "actual_completion_rate",
+            "bayesian_completion_rate",
+            "artist_completion_prior",
+            "predicted_completion_rate",
+            "score",
+            "reason",
+        ],
+    )
+    write_csv(
+        output_dir / "top_favorites_playlist.csv",
+        recs_favorites,
         [
             "uri",
             "track_name",
@@ -944,6 +1027,7 @@ def main():
     parser.add_argument("--output-dir", default="./outputs")
     parser.add_argument("--filter-primary-user", default="true", help="Whether to apply primary-user session filter.")
     parser.add_argument("--primary-user-config", default="./primary_user_config.json", help="Path to primary user filter config JSON.")
+    parser.add_argument("--favorite-artists-config", default="./favorite_artists.json", help="Path to favorite artists config JSON.")
     args = parser.parse_args()
 
     account_dir = Path(args.account_dir).resolve()
@@ -952,6 +1036,7 @@ def main():
     output_dir = Path(args.output_dir).resolve()
     use_filter = parse_bool(args.filter_primary_user)
     filter_cfg_path = Path(args.primary_user_config).resolve()
+    favorite_cfg_path = Path(args.favorite_artists_config).resolve()
 
     rows = load_extended_streaming(extended_dir)
     identity, library_tracks = load_identity_and_library(account_dir)
@@ -986,7 +1071,10 @@ def main():
     ranking_metrics = selected_result["ranking_metrics"]
     model_comparison = selected_result["model_comparison"]
     full_model = selected_result["full_model"]
-    recs = selected_result["recommendations"]
+    favorite_artists = load_favorite_artists(favorite_cfg_path)
+    recs_all = build_recommendations(selected_result["rows"], full_model["all_prob"], library_tracks, top_n=None)
+    recs = recs_all[:100]
+    recs_favorites = build_favorites_playlist(recs_all, favorite_artists, top_n=100, per_artist_cap=8, favorite_boost=0.06)
 
     dataset_comparison = [
         {
@@ -1023,6 +1111,7 @@ def main():
         attribution_summary,
         dataset_comparison,
         attribution_report_rows,
+        recs_favorites,
     )
 
     print("Pipeline completed.")

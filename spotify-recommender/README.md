@@ -31,6 +31,7 @@ The pipeline writes these to `outputs/` (ignored in git):
 - `model_metrics.json`
 - `feature_importance.csv`
 - `top_resume_playlist.csv`
+- `top_favorites_playlist.csv` (favorite-artist boosted rerank)
 - `scored_samples.csv`
 - `resume_project_summary.md`
 - `model_comparison.csv` and `model_comparison.json`
@@ -70,11 +71,14 @@ python3 src/pipeline.py \
   --tech-dir "../Spotify Technical Log Information" \
   --output-dir "./outputs" \
   --filter-primary-user true \
-  --primary-user-config "./primary_user_config.json"
+  --primary-user-config "./primary_user_config.json" \
+  --favorite-artists-config "./favorite_artists.json"
 ```
 
 Primary-user attribution is configured in:
 - `primary_user_config.json`
+Favorite-artist reranking is configured in:
+- `favorite_artists.json`
 
 ## Visualize
 ```bash
