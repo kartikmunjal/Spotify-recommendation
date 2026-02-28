@@ -707,6 +707,24 @@ def build_heuristic_probs(rows):
     return np.array(probs, dtype=float)
 
 
+def build_boosting_features(rows):
+    # Compact numeric representation for optional tree-based benchmark.
+    out = np.zeros((len(rows), 11), dtype=float)
+    for i, r in enumerate(rows):
+        out[i, 0] = float(r.get("ms_played", 0.0))
+        out[i, 1] = float(r.get("hour", 0.0))
+        out[i, 2] = float(r.get("day_of_week", 0.0))
+        out[i, 3] = float(r.get("month", 0.0))
+        out[i, 4] = float(r.get("is_weekend", 0.0))
+        out[i, 5] = float(r.get("session_position", 0.0))
+        out[i, 6] = float(r.get("recent_skip_rate_10", 0.0))
+        out[i, 7] = float(r.get("track_train_skip_rate", 0.0))
+        out[i, 8] = float(r.get("artist_train_skip_rate", 0.0))
+        out[i, 9] = float(abs(hash(str(r.get("platform", "unknown")))) % 997)
+        out[i, 10] = float(abs(hash(str(r.get("reason_end", "unknown")))) % 997)
+    return out
+
+
 def train_and_score_model(rows_train, rows_test, rows_all, num_fields, cat_fields):
     encoder = prepare_encoder(rows_train, num_fields, cat_fields)
     x_train, y_train = encode_rows(rows_train, encoder)
@@ -753,6 +771,7 @@ def write_results_md(output_dir, identity, metrics, ranking_metrics, model_compa
         f"- PR-AUC: {metrics['test_pr_auc']:.4f}",
         f"- Accuracy: {metrics['test_accuracy']:.4f}",
         f"- F1: {metrics['test_f1']:.4f}",
+        "- Recommendation score bridge: score = (0.45 * predicted_completion + 0.35 * bayesian_track_completion + 0.20 * artist_prior) * confidence(plays).",
         "",
         "## Ranking Metrics (Session-Based)",
         f"- Sessions evaluated: {ranking_metrics['ranking_sessions_evaluated']}",
@@ -773,10 +792,14 @@ def write_results_md(output_dir, identity, metrics, ranking_metrics, model_compa
 
     lines.extend(["", "## Model Comparison"])
     for row in model_comparison:
-        lines.append(
-            f"- {row['model']}: AUC={row['test_auc']:.4f}, PR-AUC={row['test_pr_auc']:.4f}, "
-            f"Accuracy={row['test_accuracy']:.4f}, F1={row['test_f1']:.4f}"
-        )
+        status = row.get("status", "ok")
+        if status != "ok":
+            lines.append(f"- {row['model']}: status={status}")
+        else:
+            lines.append(
+                f"- {row['model']}: AUC={row['test_auc']:.4f}, PR-AUC={row['test_pr_auc']:.4f}, "
+                f"Accuracy={row['test_accuracy']:.4f}, F1={row['test_f1']:.4f}"
+            )
 
     lines.extend(["", "## Top Features (Absolute Coefficient)"])
     for feat in top_features[:10]:
@@ -873,7 +896,11 @@ def write_outputs(
 
     with (output_dir / "model_comparison.json").open("w", encoding="utf-8") as f:
         json.dump(model_comparison, f, indent=2)
-    write_csv(output_dir / "model_comparison.csv", model_comparison, ["model", "test_auc", "test_pr_auc", "test_accuracy", "test_f1", "test_logloss"])
+    write_csv(
+        output_dir / "model_comparison.csv",
+        model_comparison,
+        ["model", "status", "test_auc", "test_pr_auc", "test_accuracy", "test_f1", "test_logloss"],
+    )
 
     with (output_dir / "dataset_comparison.json").open("w", encoding="utf-8") as f:
         json.dump(dataset_comparison, f, indent=2)
@@ -987,11 +1014,52 @@ def run_dataset_experiment(rows, library_tracks):
         model_comparison.append(
             {
                 "model": model_name,
+                "status": "ok",
                 "test_auc": float(ev["auc"]),
                 "test_pr_auc": float(ev["pr_auc"]),
                 "test_accuracy": float(ev["accuracy"]),
                 "test_f1": float(ev["f1"]),
                 "test_logloss": logloss(y_test, probs),
+            }
+        )
+
+    # Optional benchmark: tree-based model for nonlinear interactions.
+    try:
+        from sklearn.ensemble import HistGradientBoostingClassifier  # type: ignore
+
+        x_train_boost = build_boosting_features(train_rows)
+        x_test_boost = build_boosting_features(test_rows)
+        booster = HistGradientBoostingClassifier(
+            learning_rate=0.06,
+            max_depth=6,
+            max_iter=220,
+            min_samples_leaf=50,
+            random_state=RANDOM_STATE,
+        )
+        booster.fit(x_train_boost, y_train.astype(int))
+        boost_probs = booster.predict_proba(x_test_boost)[:, 1]
+        ev = evaluate(y_test, boost_probs)
+        model_comparison.append(
+            {
+                "model": "hist_gradient_boosting",
+                "status": "ok",
+                "test_auc": float(ev["auc"]),
+                "test_pr_auc": float(ev["pr_auc"]),
+                "test_accuracy": float(ev["accuracy"]),
+                "test_f1": float(ev["f1"]),
+                "test_logloss": logloss(y_test, boost_probs),
+            }
+        )
+    except Exception:
+        model_comparison.append(
+            {
+                "model": "hist_gradient_boosting",
+                "status": "not_available",
+                "test_auc": 0.0,
+                "test_pr_auc": 0.0,
+                "test_accuracy": 0.0,
+                "test_f1": 0.0,
+                "test_logloss": 0.0,
             }
         )
 

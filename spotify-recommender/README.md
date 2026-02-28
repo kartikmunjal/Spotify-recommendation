@@ -2,6 +2,11 @@
 
 A session-aware recommendation pipeline built from Spotify export data.
 
+## Key Results
+- Primary-user filtered model: ROC-AUC `0.8657`, PR-AUC `0.8214`, F1 `0.7381`
+- Session ranking quality: NDCG@10 `0.8654`, MAP@10 `0.7777`, Recall@10 `0.7451`
+- Family-plan attribution filter improved full-model AUC from `0.8553` to `0.8657`
+
 ## Problem
 Given user listening events, estimate the probability that a track play will complete (not be skipped), then rank candidate tracks by expected completion to create recommendation-ready outputs.
 
@@ -18,6 +23,14 @@ Given user listening events, estimate the probability that a track play will com
 5. Merge daily technical reliability signals (connection/playback errors).
 6. Train logistic regression (NumPy implementation) on chronological train split.
 7. Score plays and generate top-ranked recommendation candidates.
+
+## Session Features (Explicit)
+- `hour`, `day_of_week`, `month`, `is_weekend`: temporal context of listening behavior
+- `session_position`: position of track inside current session (30-minute gap based)
+- `recent_skip_rate_10`: skip rate over preceding 10 events, capturing local intent/friction
+- `reason_start`, `reason_end`: playback transitions (e.g., trackdone, fwdbtn)
+- `platform`, `conn_country`: environment and geo context
+- `track_train_skip_rate`, `artist_train_skip_rate`: historical priors from train window only
 
 ## Key Features
 - Time: `hour`, `day_of_week`, `month`, `is_weekend`
@@ -39,6 +52,14 @@ The pipeline writes these to `outputs/` (ignored in git):
 - `attribution_summary.json` and `user_attribution_report.csv`
 - `RESULTS.md` (summary of classification + ranking metrics)
 - `figures/*.svg`, `figures/dashboard.html`, and `figures/visualization_summary.md`
+
+## Recommendation Bridge
+Recommendations are generated from skip/completion predictions using an explicit ranking function:
+
+`score = (0.45 * predicted_completion + 0.35 * bayesian_track_completion + 0.20 * artist_completion_prior) * confidence(plays)`
+
+- `top_resume_playlist.csv`: pure global ranking output
+- `top_favorites_playlist.csv`: favorite-artist aware rerank (configured in `favorite_artists.json`)
 
 ## Visual Diagnostics
 
@@ -80,6 +101,13 @@ Primary-user attribution is configured in:
 Favorite-artist reranking is configured in:
 - `favorite_artists.json`
 
+## Model Benchmarking
+- Baselines: `full_logistic`, `baseline_logistic`, `track_artist_heuristic`
+- Additional benchmark: `hist_gradient_boosting` (runs automatically when `scikit-learn` is available)
+- If unavailable, it is reported as `status=not_available` in `model_comparison.csv`
+- Install optional benchmark dependency with:
+  - `pip install -r requirements-optional.txt`
+
 ## Visualize
 ```bash
 cd spotify-recommender
@@ -95,3 +123,7 @@ python3 src/visualize.py \
 
 ## Privacy and Security
 This public repository excludes all personal Spotify export files and generated personal model outputs.
+
+## Limitations and Next Steps
+- Cold-start users/tracks are not fully solved yet; current model relies on behavioral priors and session context.
+- Future work: content/audio embeddings, candidate retrieval, and dedicated cold-start rankers.
