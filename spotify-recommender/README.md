@@ -36,6 +36,24 @@ The pipeline writes these to `outputs/` (ignored in git):
 - `RESULTS.md` (summary of classification + ranking metrics)
 - `figures/*.svg`, `figures/dashboard.html`, and `figures/visualization_summary.md`
 
+## Visual Diagnostics
+
+### 1) Completion Rate by Hour
+![Completion Rate by Hour](./outputs/figures/completion_rate_by_hour.svg)
+**Takeaway:** Completion probability varies by time-of-day, indicating that temporal context is a meaningful recommendation feature.
+
+### 2) Prediction Score Distribution (Completed vs Skipped)
+![Prediction Distribution](./outputs/figures/prediction_distribution.svg)
+**Takeaway:** The model assigns higher completion probabilities to completed plays than skipped plays, showing good class separation.
+
+### 3) Completion Rate for Most Played Artists
+![Top Artists Completion Rate](./outputs/figures/top_artists_completion_rate.svg)
+**Takeaway:** Artist-level behavior is strongly differentiated, supporting the use of artist priors in ranking.
+
+### 4) Platform Mix
+![Platform Mix](./outputs/figures/platform_mix.svg)
+**Takeaway:** Listening context is platform-dependent, which justifies platform features in completion prediction.
+
 ## Run
 ```bash
 cd spotify-recommender
