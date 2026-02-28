@@ -40,6 +40,7 @@ The pipeline writes these to `outputs/` (ignored in git):
 
 ### 1) Completion Rate by Hour
 <img width="2838" height="1450" alt="image" src="https://github.com/user-attachments/assets/b4dab451-c609-4355-ae06-a5904b4d94f8" />
+
 **Takeaway:** Completion probability varies by time-of-day, indicating that temporal context is a meaningful recommendation feature.
 
 ### 2) Prediction Score Distribution (Completed vs Skipped)
