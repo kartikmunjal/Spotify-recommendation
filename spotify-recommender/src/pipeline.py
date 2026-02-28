@@ -570,6 +570,9 @@ def build_recommendations(rows, probs, library_tracks, top_n=100):
     lib_by_uri = {t["uri"]: t for t in library_tracks}
     candidate_uris = set(track_stats.keys()) | set(lib_by_uri.keys())
 
+    prior_strength = 8.0  # Bayesian smoothing prior pseudo-count.
+    min_evidence_plays = 2
+
     for uri in candidate_uris:
         s = track_stats.get(uri)
         if s is None:
@@ -587,11 +590,16 @@ def build_recommendations(rows, probs, library_tracks, top_n=100):
             track_name = s["track_name"]
             artist = s["artist"]
 
-        score = 0.65 * pred + 0.35 * actual
+        artist_aff = artist_prior.get(artist, global_prior)
+        bayes_actual = ((plays * actual) + (prior_strength * artist_aff)) / (plays + prior_strength)
+        evidence = plays / (plays + prior_strength)
+        score = 0.45 * pred + 0.35 * bayes_actual + 0.20 * artist_aff
+        score = score * (0.65 + 0.35 * evidence)
+
         reason = (
-            "High predicted completion and repeated positive listening history"
-            if plays >= 3
-            else "Strong artist-level preference with high completion probability"
+            "High confidence from repeated positive listening history"
+            if plays >= 5
+            else "Strong artist preference with moderate play confidence"
         )
         recs.append(
             {
@@ -600,14 +608,29 @@ def build_recommendations(rows, probs, library_tracks, top_n=100):
                 "artist": artist,
                 "plays": plays,
                 "actual_completion_rate": round(actual, 6),
+                "bayesian_completion_rate": round(bayes_actual, 6),
+                "artist_completion_prior": round(artist_aff, 6),
                 "predicted_completion_rate": round(pred, 6),
                 "score": round(score, 6),
                 "reason": reason,
             }
         )
 
+    # Prefer recommendations with at least modest play evidence.
+    evidence_recs = [r for r in recs if r["plays"] >= min_evidence_plays]
+    evidence_recs.sort(key=lambda x: (x["score"], x["plays"]), reverse=True)
+    if len(evidence_recs) >= top_n:
+        return evidence_recs[:top_n]
+
     recs.sort(key=lambda x: (x["score"], x["plays"]), reverse=True)
-    return recs[:top_n]
+    seen = {r["uri"] for r in evidence_recs}
+    for r in recs:
+        if len(evidence_recs) >= top_n:
+            break
+        if r["uri"] not in seen:
+            evidence_recs.append(r)
+            seen.add(r["uri"])
+    return evidence_recs[:top_n]
 
 
 def build_heuristic_probs(rows):
@@ -721,7 +744,18 @@ def write_outputs(
     write_csv(
         output_dir / "top_resume_playlist.csv",
         recs,
-        ["uri", "track_name", "artist", "plays", "actual_completion_rate", "predicted_completion_rate", "score", "reason"],
+        [
+            "uri",
+            "track_name",
+            "artist",
+            "plays",
+            "actual_completion_rate",
+            "bayesian_completion_rate",
+            "artist_completion_prior",
+            "predicted_completion_rate",
+            "score",
+            "reason",
+        ],
     )
 
     scored_samples = []
