@@ -7,6 +7,7 @@ This project is structured to demonstrate:
 - End-to-end ownership: ingestion, feature engineering, model training, evaluation, and recommendation outputs.
 - Product framing: optimize completion probability, not just offline model metrics.
 - Multi-model evaluation with ranking metrics (`NDCG`, `MAP`, `Recall@K`).
+- Primary-user attribution filtering to reduce family-plan multi-user noise.
 - Visualization of listening behavior and model score distributions.
 - Responsible data handling: no personal export data or generated personal outputs are published.
 

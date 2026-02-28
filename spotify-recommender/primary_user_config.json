@@ -1,0 +1,20 @@
+{
+  "home_country": "US",
+  "primary_platforms": ["ios", "osx"],
+  "driving_platform_hints": ["not_applicable", "cast", "tizen"],
+  "preferred_hour_window": {
+    "start": 6,
+    "end": 1
+  },
+  "artist_affinity_top_n": 60,
+  "artist_affinity_min_ratio": 0.2,
+  "min_session_score": 2.6,
+  "require_country_match": true,
+  "weights": {
+    "country": 1.2,
+    "platform": 1.2,
+    "hour": 0.7,
+    "artist_affinity": 1.1,
+    "driving_hint": 0.6
+  }
+}

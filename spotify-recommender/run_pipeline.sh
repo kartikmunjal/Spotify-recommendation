@@ -5,7 +5,9 @@ python src/pipeline.py \
   --account-dir "../Spotify Account Data" \
   --extended-dir "../Spotify Extended Streaming History" \
   --tech-dir "../Spotify Technical Log Information" \
-  --output-dir "./outputs"
+  --output-dir "./outputs" \
+  --filter-primary-user true \
+  --primary-user-config "./primary_user_config.json"
 
 # Optional visualization step (generates SVG charts + dashboard)
 python src/visualize.py \

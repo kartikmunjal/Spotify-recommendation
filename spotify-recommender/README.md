@@ -13,10 +13,11 @@ Given user listening events, estimate the probability that a track play will com
 ## System Design
 1. Ingest data from three export sources.
 2. Build temporal/session features (hour, day, session position, recent skip rate).
-3. Add behavioral priors (track/artist skip rates from train window only).
-4. Merge daily technical reliability signals (connection/playback errors).
-5. Train logistic regression (NumPy implementation) on chronological train split.
-6. Score plays and generate top-ranked recommendation candidates.
+3. Attribute likely primary-user sessions to handle family-plan multi-user noise.
+4. Add behavioral priors (track/artist skip rates from train window only).
+5. Merge daily technical reliability signals (connection/playback errors).
+6. Train logistic regression (NumPy implementation) on chronological train split.
+7. Score plays and generate top-ranked recommendation candidates.
 
 ## Key Features
 - Time: `hour`, `day_of_week`, `month`, `is_weekend`
@@ -33,6 +34,8 @@ The pipeline writes these to `outputs/` (ignored in git):
 - `scored_samples.csv`
 - `resume_project_summary.md`
 - `model_comparison.csv` and `model_comparison.json`
+- `dataset_comparison.csv` and `dataset_comparison.json`
+- `attribution_summary.json` and `user_attribution_report.csv`
 - `RESULTS.md` (summary of classification + ranking metrics)
 - `figures/*.svg`, `figures/dashboard.html`, and `figures/visualization_summary.md`
 
@@ -65,8 +68,13 @@ python3 src/pipeline.py \
   --account-dir "../Spotify Account Data" \
   --extended-dir "../Spotify Extended Streaming History" \
   --tech-dir "../Spotify Technical Log Information" \
-  --output-dir "./outputs"
+  --output-dir "./outputs" \
+  --filter-primary-user true \
+  --primary-user-config "./primary_user_config.json"
 ```
+
+Primary-user attribution is configured in:
+- `primary_user_config.json`
 
 ## Visualize
 ```bash
