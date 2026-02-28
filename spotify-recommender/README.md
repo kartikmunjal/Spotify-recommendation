@@ -25,19 +25,16 @@ Given user listening events, estimate the probability that a track play will com
 7. Score plays and generate top-ranked recommendation candidates.
 
 ## Session Features (Explicit)
-- `hour`, `day_of_week`, `month`, `is_weekend`: temporal context of listening behavior
-- `session_position`: position of track inside current session (30-minute gap based)
-- `recent_skip_rate_10`: skip rate over preceding 10 events, capturing local intent/friction
-- `reason_start`, `reason_end`: playback transitions (e.g., trackdone, fwdbtn)
-- `platform`, `conn_country`: environment and geo context
-- `track_train_skip_rate`, `artist_train_skip_rate`: historical priors from train window only
-
-## Key Features
-- Time: `hour`, `day_of_week`, `month`, `is_weekend`
-- Session: `session_position`, `recent_skip_rate_10`
-- Behavior priors: `track_train_skip_rate`, `artist_train_skip_rate`, play counts
-- Context: `platform`, `conn_country`, `reason_start`, `reason_end`
-- Reliability: `connection_error_count`, `playback_error_count`
+| Feature | Type | Rationale |
+|---|---|---|
+| `hour`, `day_of_week`, `month`, `is_weekend` | Temporal numeric | Captures time-dependent listening intent and completion patterns. |
+| `session_position` | Session numeric | Early vs late session behavior differs (discovery vs committed listening). |
+| `recent_skip_rate_10` | Sequential numeric | Short-term friction signal from prior 10 events in sequence. |
+| `track_train_plays`, `track_train_skip_rate` | Track prior | Encodes per-track affinity from train window only (no leakage). |
+| `artist_train_plays`, `artist_train_skip_rate` | Artist prior | Stabilizes predictions for sparse tracks via artist-level behavior. |
+| `connection_error_count`, `playback_error_count` | Reliability numeric | Models technical context that can affect completions/skips. |
+| `platform`, `conn_country` | Context categorical | Device/environment effects are meaningful for playback behavior. |
+| `reason_start`, `reason_end` | Playback state categorical | Transition causes (`trackdone`, `fwdbtn`, etc.) carry intent signals. |
 
 ## Outputs (Local Only)
 The pipeline writes these to `outputs/` (ignored in git):
@@ -54,12 +51,27 @@ The pipeline writes these to `outputs/` (ignored in git):
 - `figures/*.svg`, `figures/dashboard.html`, and `figures/visualization_summary.md`
 
 ## Recommendation Bridge
-Recommendations are generated from skip/completion predictions using an explicit ranking function:
+Skip prediction is converted to track ranking using an explicit scoring function:
 
 `score = (0.45 * predicted_completion + 0.35 * bayesian_track_completion + 0.20 * artist_completion_prior) * confidence(plays)`
 
+- `predicted_completion`: model output for completion probability
+- `bayesian_track_completion`: smoothed per-track completion to avoid one-play overfitting
+- `artist_completion_prior`: fallback for sparse tracks and cross-track affinity
+- `confidence(plays)`: downweights low-evidence tracks
+
 - `top_resume_playlist.csv`: pure global ranking output
 - `top_favorites_playlist.csv`: favorite-artist aware rerank (configured in `favorite_artists.json`)
+
+## Model Comparison (Chronological Holdout)
+| Model | Status | ROC-AUC | PR-AUC | Accuracy | F1 | Logloss |
+|---|---|---:|---:|---:|---:|---:|
+| `full_logistic` | ok | 0.8657 | 0.8214 | 0.7881 | 0.7381 | 0.4518 |
+| `baseline_logistic` | ok | 0.8016 | 0.7236 | 0.7241 | 0.6615 | 0.5328 |
+| `track_artist_heuristic` | ok | 0.5030 | 0.4019 | 0.4950 | 0.4157 | 0.9435 |
+| `hist_gradient_boosting` | not_available* | - | - | - | - | - |
+
+`*` Runs automatically when `scikit-learn` is installed (`pip install -r requirements-optional.txt`).
 
 ## Visual Diagnostics
 
@@ -81,7 +93,7 @@ Recommendations are generated from skip/completion predictions using an explicit
 ### 4) Platform Mix
 <img width="2864" height="1452" alt="image" src="https://github.com/user-attachments/assets/562b472a-60b1-4b1b-bb3d-18147b56345b" />
 
-**Takeaway:** Listening context is platform-dependent, which justifies platform features in completion prediction. Not_applic depicts to data listened to while driving
+**Takeaway:** Listening context is platform-dependent, which justifies platform features in completion prediction. `not_applicable` can represent driving/vehicle listening context.
 
 ## Run
 ```bash
@@ -127,3 +139,8 @@ This public repository excludes all personal Spotify export files and generated 
 ## Limitations and Next Steps
 - Cold-start users/tracks are not fully solved yet; current model relies on behavioral priors and session context.
 - Future work: content/audio embeddings, candidate retrieval, and dedicated cold-start rankers.
+
+## GitHub Metadata
+Set repository metadata for discoverability:
+- Description: `Session-aware Spotify skip prediction and recommendation ranking with family-plan attribution filtering.`
+- Topics: `machine-learning`, `spotify`, `recommender-systems`, `python`, `ranking`, `time-series`
