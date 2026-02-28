@@ -44,16 +44,19 @@ The pipeline writes these to `outputs/` (ignored in git):
 **Takeaway:** Completion probability varies by time-of-day, indicating that temporal context is a meaningful recommendation feature.
 
 ### 2) Prediction Score Distribution (Completed vs Skipped)
-![Prediction Distribution](./outputs/figures/prediction_distribution.svg)
+<img width="2864" height="1450" alt="image" src="https://github.com/user-attachments/assets/479a5e97-8d80-4f9a-a76e-aa37bc9a08bf" />
+
 **Takeaway:** The model assigns higher completion probabilities to completed plays than skipped plays, showing good class separation.
 
 ### 3) Completion Rate for Most Played Artists
-![Top Artists Completion Rate](./outputs/figures/top_artists_completion_rate.svg)
+<img width="2868" height="1638" alt="image" src="https://github.com/user-attachments/assets/2bb8915d-ef14-4064-9e61-237a7dc58781" />
+
 **Takeaway:** Artist-level behavior is strongly differentiated, supporting the use of artist priors in ranking.
 
 ### 4) Platform Mix
-![Platform Mix](./outputs/figures/platform_mix.svg)
-**Takeaway:** Listening context is platform-dependent, which justifies platform features in completion prediction.
+<img width="2864" height="1452" alt="image" src="https://github.com/user-attachments/assets/562b472a-60b1-4b1b-bb3d-18147b56345b" />
+
+**Takeaway:** Listening context is platform-dependent, which justifies platform features in completion prediction. Not_applic depicts to data listened to while driving
 
 ## Run
 ```bash
