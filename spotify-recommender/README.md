@@ -2,6 +2,11 @@
 
 A session-aware recommendation pipeline built from Spotify export data.
 
+## Quick Links
+- Technical brief: `docs/TECHNICAL_BRIEF.md`
+- Reproducibility: `docs/REPRODUCIBILITY.md`
+- Latest result summary: `outputs/RESULTS.md`
+
 ## Key Results
 - Primary-user filtered model: ROC-AUC `0.8657`, PR-AUC `0.8214`, F1 `0.7381`
 - Session ranking quality: NDCG@10 `0.8654`, MAP@10 `0.7777`, Recall@10 `0.7451`
@@ -151,6 +156,8 @@ streamlit run app.py
 - `app.py`: Streamlit dashboard for outputs and recommendations
 - `run_pipeline.sh`: convenience runner
 - `requirements.txt`: dependencies
+- `docs/TECHNICAL_BRIEF.md`: design decisions, tradeoffs, and limitations
+- `docs/REPRODUCIBILITY.md`: exact local run steps
 
 ## Privacy and Security
 This public repository excludes all personal Spotify export files and generated personal model outputs.

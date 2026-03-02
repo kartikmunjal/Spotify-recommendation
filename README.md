@@ -14,6 +14,11 @@ This project is structured to demonstrate:
 ## Repository Contents
 - `spotify-recommender/`: model code, pipeline script, and project documentation.
 
+## Reviewer Quick Links
+- Project README: `spotify-recommender/README.md`
+- Technical brief: `spotify-recommender/docs/TECHNICAL_BRIEF.md`
+- Reproducibility guide: `spotify-recommender/docs/REPRODUCIBILITY.md`
+
 ## Snapshot Metrics
 - ROC-AUC: `0.8657`
 - PR-AUC: `0.8214`
