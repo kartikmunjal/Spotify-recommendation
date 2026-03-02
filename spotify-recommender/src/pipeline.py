@@ -708,21 +708,134 @@ def build_heuristic_probs(rows):
 
 
 def build_boosting_features(rows):
-    # Compact numeric representation for optional tree-based benchmark.
+    # Pre-play context only; avoid clearly post-play/leaky fields like reason_end/ms_played.
     out = np.zeros((len(rows), 11), dtype=float)
     for i, r in enumerate(rows):
-        out[i, 0] = float(r.get("ms_played", 0.0))
-        out[i, 1] = float(r.get("hour", 0.0))
-        out[i, 2] = float(r.get("day_of_week", 0.0))
-        out[i, 3] = float(r.get("month", 0.0))
-        out[i, 4] = float(r.get("is_weekend", 0.0))
-        out[i, 5] = float(r.get("session_position", 0.0))
-        out[i, 6] = float(r.get("recent_skip_rate_10", 0.0))
-        out[i, 7] = float(r.get("track_train_skip_rate", 0.0))
-        out[i, 8] = float(r.get("artist_train_skip_rate", 0.0))
-        out[i, 9] = float(abs(hash(str(r.get("platform", "unknown")))) % 997)
-        out[i, 10] = float(abs(hash(str(r.get("reason_end", "unknown")))) % 997)
+        out[i, 0] = float(r.get("hour", 0.0))
+        out[i, 1] = float(r.get("day_of_week", 0.0))
+        out[i, 2] = float(r.get("month", 0.0))
+        out[i, 3] = float(r.get("is_weekend", 0.0))
+        out[i, 4] = float(r.get("session_position", 0.0))
+        out[i, 5] = float(r.get("recent_skip_rate_10", 0.0))
+        out[i, 6] = float(r.get("track_train_skip_rate", 0.0))
+        out[i, 7] = float(r.get("artist_train_skip_rate", 0.0))
+        out[i, 8] = float(abs(hash(str(r.get("platform", "unknown")))) % 997)
+        out[i, 9] = float(abs(hash(str(r.get("conn_country", "unknown")))) % 997)
+        out[i, 10] = float(abs(hash(str(r.get("reason_start", "unknown")))) % 997)
     return out
+
+
+def run_core_model(rows_train, rows_test, rows_all):
+    full_num_fields = [
+        "ms_played",
+        "hour",
+        "day_of_week",
+        "month",
+        "is_weekend",
+        "session_position",
+        "recent_skip_rate_10",
+        "track_train_plays",
+        "track_train_skip_rate",
+        "artist_train_plays",
+        "artist_train_skip_rate",
+        "connection_error_count",
+        "playback_error_count",
+    ]
+    full_cat_fields = ["platform", "conn_country", "reason_start", "reason_end"]
+    return train_and_score_model(rows_train, rows_test, rows_all, full_num_fields, full_cat_fields)
+
+
+def logloss(y, p):
+    p = np.clip(p, EPS, 1 - EPS)
+    return float(np.mean(-(y * np.log(p) + (1 - y) * np.log(1 - p))))
+
+
+def run_rolling_backtests(rows, n_windows=3, test_fraction=0.1):
+    total = len(rows)
+    if total < 20000:
+        return []
+
+    test_size = max(int(total * test_fraction), 5000)
+    windows = []
+    # Use the latest windows so results reflect recent behavior.
+    for i in range(n_windows):
+        test_end = total - (n_windows - 1 - i) * test_size
+        test_start = max(0, test_end - test_size)
+        train_end = test_start
+        if train_end < int(0.5 * total):
+            continue
+
+        split_rows_all = clone_rows(rows[:test_end])
+        split_train = split_rows_all[:train_end]
+        split_test = split_rows_all[train_end:test_end]
+        attach_train_priors(split_rows_all, split_train)
+        core = run_core_model(split_train, split_test, split_rows_all)
+        y_test = core["y_test"]
+        ev = evaluate(y_test, core["test_prob"])
+        windows.append(
+            {
+                "window_index": len(windows) + 1,
+                "train_rows": len(split_train),
+                "test_rows": len(split_test),
+                "test_start_ts": split_test[0]["ts"],
+                "test_end_ts": split_test[-1]["ts"],
+                "test_auc": float(ev["auc"]),
+                "test_pr_auc": float(ev["pr_auc"]),
+                "test_accuracy": float(ev["accuracy"]),
+                "test_f1": float(ev["f1"]),
+                "test_logloss": logloss(y_test, core["test_prob"]),
+            }
+        )
+    return windows
+
+
+def build_cold_start_recommendations(rows, library_tracks, top_n=100, per_artist_cap=5):
+    # Cold-start fallback: no per-track history needed, rely on artist priors + popularity.
+    artist_plays = defaultdict(int)
+    artist_completed = defaultdict(float)
+    for r in rows:
+        artist = r["artist"]
+        artist_plays[artist] += 1
+        artist_completed[artist] += r["target_completed"]
+    global_completion = float(sum(r["target_completed"] for r in rows) / max(len(rows), 1))
+
+    out = []
+    seen_uris = set()
+    for t in library_tracks:
+        uri = t["uri"]
+        if uri in seen_uris:
+            continue
+        seen_uris.add(uri)
+        artist = t.get("artist", "unknown")
+        plays = artist_plays.get(artist, 0)
+        artist_rate = (artist_completed[artist] / plays) if plays > 0 else global_completion
+        popularity = np.log1p(plays) / np.log1p(max(1, max(artist_plays.values()) if artist_plays else 1))
+        score = 0.7 * artist_rate + 0.3 * popularity
+        out.append(
+            {
+                "uri": uri,
+                "track_name": t.get("track_name", "unknown"),
+                "artist": artist,
+                "artist_historical_plays": plays,
+                "artist_completion_prior": round(float(artist_rate), 6),
+                "popularity_component": round(float(popularity), 6),
+                "cold_start_score": round(float(score), 6),
+                "reason": "Cold-start fallback: artist prior + popularity",
+            }
+        )
+
+    out.sort(key=lambda x: (x["cold_start_score"], x["artist_historical_plays"]), reverse=True)
+    diversified = []
+    artist_counts = defaultdict(int)
+    for row in out:
+        artist = row["artist"]
+        if artist_counts[artist] >= per_artist_cap:
+            continue
+        diversified.append(row)
+        artist_counts[artist] += 1
+        if len(diversified) >= top_n:
+            break
+    return diversified
 
 
 def train_and_score_model(rows_train, rows_test, rows_all, num_fields, cat_fields):
@@ -752,7 +865,17 @@ def write_csv(path: Path, rows, headers):
             writer.writerow(r)
 
 
-def write_results_md(output_dir, identity, metrics, ranking_metrics, model_comparison, top_features, attribution_summary, dataset_comparison):
+def write_results_md(
+    output_dir,
+    identity,
+    metrics,
+    ranking_metrics,
+    model_comparison,
+    top_features,
+    attribution_summary,
+    dataset_comparison,
+    rolling_backtests,
+):
     name = identity.get("displayName", "Spotify User") if isinstance(identity, dict) else "Spotify User"
     lines = [
         "# Results",
@@ -805,6 +928,15 @@ def write_results_md(output_dir, identity, metrics, ranking_metrics, model_compa
     for feat in top_features[:10]:
         lines.append(f"- {feat['feature']}: {feat['coefficient']}")
 
+    lines.extend(["", "## Rolling Backtests"])
+    if rolling_backtests:
+        aucs = [w["test_auc"] for w in rolling_backtests]
+        lines.append(f"- Windows: {len(rolling_backtests)}")
+        lines.append(f"- Mean AUC: {float(np.mean(aucs)):.4f}")
+        lines.append(f"- Min/Max AUC: {float(np.min(aucs)):.4f} / {float(np.max(aucs)):.4f}")
+    else:
+        lines.append("- Not enough data for rolling backtests.")
+
     (output_dir / "RESULTS.md").write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -823,6 +955,8 @@ def write_outputs(
     dataset_comparison,
     attribution_report_rows,
     recs_favorites,
+    rolling_backtests,
+    cold_start_recs,
 ):
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -860,6 +994,20 @@ def write_outputs(
             "artist_completion_prior",
             "predicted_completion_rate",
             "score",
+            "reason",
+        ],
+    )
+    write_csv(
+        output_dir / "cold_start_recommendations.csv",
+        cold_start_recs,
+        [
+            "uri",
+            "track_name",
+            "artist",
+            "artist_historical_plays",
+            "artist_completion_prior",
+            "popularity_component",
+            "cold_start_score",
             "reason",
         ],
     )
@@ -906,6 +1054,26 @@ def write_outputs(
         json.dump(dataset_comparison, f, indent=2)
     write_csv(output_dir / "dataset_comparison.csv", dataset_comparison, ["dataset", "rows", "test_auc", "test_pr_auc", "test_accuracy", "test_f1", "test_logloss"])
 
+    with (output_dir / "rolling_backtests.json").open("w", encoding="utf-8") as f:
+        json.dump(rolling_backtests, f, indent=2)
+    if rolling_backtests:
+        write_csv(
+            output_dir / "rolling_backtests.csv",
+            rolling_backtests,
+            [
+                "window_index",
+                "train_rows",
+                "test_rows",
+                "test_start_ts",
+                "test_end_ts",
+                "test_auc",
+                "test_pr_auc",
+                "test_accuracy",
+                "test_f1",
+                "test_logloss",
+            ],
+        )
+
     with (output_dir / "attribution_summary.json").open("w", encoding="utf-8") as f:
         json.dump(attribution_summary, f, indent=2)
     write_csv(
@@ -951,7 +1119,17 @@ def write_outputs(
     ]
     (output_dir / "resume_project_summary.md").write_text("\n".join(summary_lines), encoding="utf-8")
 
-    write_results_md(output_dir, identity, metrics, ranking_metrics, model_comparison, top_features, attribution_summary, dataset_comparison)
+    write_results_md(
+        output_dir,
+        identity,
+        metrics,
+        ranking_metrics,
+        model_comparison,
+        top_features,
+        attribution_summary,
+        dataset_comparison,
+        rolling_backtests,
+    )
 
 
 def clone_rows(rows):
@@ -962,23 +1140,6 @@ def run_dataset_experiment(rows, library_tracks):
     work_rows = clone_rows(rows)
     train_rows, test_rows = split_rows(work_rows, train_ratio=0.8)
     attach_train_priors(work_rows, train_rows)
-
-    full_num_fields = [
-        "ms_played",
-        "hour",
-        "day_of_week",
-        "month",
-        "is_weekend",
-        "session_position",
-        "recent_skip_rate_10",
-        "track_train_plays",
-        "track_train_skip_rate",
-        "artist_train_plays",
-        "artist_train_skip_rate",
-        "connection_error_count",
-        "playback_error_count",
-    ]
-    full_cat_fields = ["platform", "conn_country", "reason_start", "reason_end"]
 
     baseline_num_fields = [
         "ms_played",
@@ -991,17 +1152,13 @@ def run_dataset_experiment(rows, library_tracks):
     ]
     baseline_cat_fields = ["platform"]
 
-    full_model = train_and_score_model(train_rows, test_rows, work_rows, full_num_fields, full_cat_fields)
+    full_model = run_core_model(train_rows, test_rows, work_rows)
     base_model = train_and_score_model(train_rows, test_rows, work_rows, baseline_num_fields, baseline_cat_fields)
 
     y_train = full_model["y_train"]
     y_test = full_model["y_test"]
     test_eval = evaluate(y_test, full_model["test_prob"])
     ranking_metrics = ranking_metrics_by_session(test_rows, full_model["test_prob"], ks=(5, 10), min_session_len=5)
-
-    def logloss(y, p):
-        p = np.clip(p, EPS, 1 - EPS)
-        return float(np.mean(-(y * np.log(p) + (1 - y) * np.log(1 - p))))
 
     heuristic_test_probs = build_heuristic_probs(test_rows)
     model_comparison = []
@@ -1143,6 +1300,8 @@ def main():
     recs_all = build_recommendations(selected_result["rows"], full_model["all_prob"], library_tracks, top_n=None)
     recs = recs_all[:100]
     recs_favorites = build_favorites_playlist(recs_all, favorite_artists, top_n=100, per_artist_cap=8, favorite_boost=0.06)
+    cold_start_recs = build_cold_start_recommendations(selected_result["rows"], library_tracks, top_n=100)
+    rolling_backtests = run_rolling_backtests(selected_result["rows"], n_windows=3, test_fraction=0.1)
 
     dataset_comparison = [
         {
@@ -1180,6 +1339,8 @@ def main():
         dataset_comparison,
         attribution_report_rows,
         recs_favorites,
+        rolling_backtests,
+        cold_start_recs,
     )
 
     print("Pipeline completed.")

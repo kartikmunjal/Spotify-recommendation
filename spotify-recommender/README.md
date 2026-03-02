@@ -6,6 +6,8 @@ A session-aware recommendation pipeline built from Spotify export data.
 - Primary-user filtered model: ROC-AUC `0.8657`, PR-AUC `0.8214`, F1 `0.7381`
 - Session ranking quality: NDCG@10 `0.8654`, MAP@10 `0.7777`, Recall@10 `0.7451`
 - Family-plan attribution filter improved full-model AUC from `0.8553` to `0.8657`
+- Logistic regression outperformed optional gradient boosting benchmark on holdout data (`AUC 0.8657` vs `0.6990`)
+- Rolling backtests are exported in `outputs/rolling_backtests.csv` for temporal stability checks
 
 ## Problem
 Given user listening events, estimate the probability that a track play will complete (not be skipped), then rank candidate tracks by expected completion to create recommendation-ready outputs.
@@ -46,7 +48,9 @@ The pipeline writes these to `outputs/` (ignored in git):
 - `resume_project_summary.md`
 - `model_comparison.csv` and `model_comparison.json`
 - `dataset_comparison.csv` and `dataset_comparison.json`
+- `rolling_backtests.csv` and `rolling_backtests.json`
 - `attribution_summary.json` and `user_attribution_report.csv`
+- `cold_start_recommendations.csv`
 - `RESULTS.md` (summary of classification + ranking metrics)
 - `figures/*.svg`, `figures/dashboard.html`, and `figures/visualization_summary.md`
 
@@ -62,6 +66,7 @@ Skip prediction is converted to track ranking using an explicit scoring function
 
 - `top_resume_playlist.csv`: pure global ranking output
 - `top_favorites_playlist.csv`: favorite-artist aware rerank (configured in `favorite_artists.json`)
+- `cold_start_recommendations.csv`: fallback ranking for sparse/new-user scenarios (artist prior + popularity)
 
 ## Model Comparison (Chronological Holdout)
 | Model | Status | ROC-AUC | PR-AUC | Accuracy | F1 | Logloss |
@@ -69,9 +74,9 @@ Skip prediction is converted to track ranking using an explicit scoring function
 | `full_logistic` | ok | 0.8657 | 0.8214 | 0.7881 | 0.7381 | 0.4518 |
 | `baseline_logistic` | ok | 0.8016 | 0.7236 | 0.7241 | 0.6615 | 0.5328 |
 | `track_artist_heuristic` | ok | 0.5030 | 0.4019 | 0.4950 | 0.4157 | 0.9435 |
-| `hist_gradient_boosting` | not_available* | - | - | - | - | - |
+| `hist_gradient_boosting` | ok | 0.6990 | 0.6047 | 0.6886 | 0.5768 | 0.8411 |
 
-`*` Runs automatically when `scikit-learn` is installed (`pip install -r requirements-optional.txt`).
+The benchmark runs automatically when `scikit-learn` is installed (`pip install -r requirements-optional.txt`).
 
 ## Visual Diagnostics
 
@@ -120,6 +125,12 @@ Favorite-artist reranking is configured in:
 - Install optional benchmark dependency with:
   - `pip install -r requirements-optional.txt`
 
+## Rolling Backtests
+- The pipeline computes multiple chronological windows and exports:
+  - `outputs/rolling_backtests.csv`
+  - `outputs/rolling_backtests.json`
+- This tests whether performance is stable across different time slices, not just one holdout split.
+
 ## Visualize
 ```bash
 cd spotify-recommender
@@ -128,8 +139,16 @@ python3 src/visualize.py \
   --out-dir "./outputs/figures"
 ```
 
+## Interactive App (Streamlit)
+```bash
+cd spotify-recommender
+pip install -r requirements-optional.txt
+streamlit run app.py
+```
+
 ## Repo Structure
 - `src/pipeline.py`: full training + scoring + recommendation pipeline
+- `app.py`: Streamlit dashboard for outputs and recommendations
 - `run_pipeline.sh`: convenience runner
 - `requirements.txt`: dependencies
 
@@ -138,6 +157,7 @@ This public repository excludes all personal Spotify export files and generated 
 
 ## Limitations and Next Steps
 - Cold-start users/tracks are not fully solved yet; current model relies on behavioral priors and session context.
+- Current cold-start fallback is heuristic (`artist prior + popularity`), not a learned cold-start ranker.
 - Future work: content/audio embeddings, candidate retrieval, and dedicated cold-start rankers.
 
 ## GitHub Metadata

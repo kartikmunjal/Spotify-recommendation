@@ -19,6 +19,7 @@ This project is structured to demonstrate:
 - PR-AUC: `0.8214`
 - F1: `0.7381`
 - NDCG@10: `0.8654`
+- Rolling-backtest output + cold-start fallback recommendations included
 
 ## Local Data Contract
 Run the project with Spotify export folders present locally as siblings to this repo:
