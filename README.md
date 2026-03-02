@@ -1,51 +1,62 @@
 # Spotify Recommender
 
-This repository contains a production-style ML project that predicts playback completion probability and ranks tracks for personalized recommendation.
+This repository contains a Spotify listening project that:
+- predicts play completion vs skip from historical listening events
+- ranks tracks using the prediction output and behavior priors
+- evaluates results with chronological holdout and rolling backtests
 
-## Project Highlights
-This project is structured to demonstrate:
-- End-to-end ownership: ingestion, feature engineering, model training, evaluation, and recommendation outputs.
-- Product framing: optimize completion probability, not just offline model metrics.
-- Multi-model evaluation with ranking metrics (`NDCG`, `MAP`, `Recall@K`).
-- Primary-user attribution filtering to reduce family-plan multi-user noise.
-- Visualization of listening behavior and model score distributions.
-- Responsible data handling: no personal export data or generated personal outputs are published.
+## What To Read First
+- [Project README](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/README.md)
+- [Technical Brief](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/docs/TECHNICAL_BRIEF.md)
+- [Reproducibility Guide](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/docs/REPRODUCIBILITY.md)
+- [Latest Results](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/RESULTS.md)
+- [Model Comparison](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/model_comparison.csv)
+- [Rolling Backtests](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/rolling_backtests.csv)
+- [Global Recommendations](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/top_resume_playlist.csv)
+- [Favorites-Aware Recommendations](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/top_favorites_playlist.csv)
 
-## Repository Contents
-- `spotify-recommender/`: model code, pipeline script, and project documentation.
-
-## Reviewer Quick Links
-- Project README: `spotify-recommender/README.md`
-- Technical brief: `spotify-recommender/docs/TECHNICAL_BRIEF.md`
-- Reproducibility guide: `spotify-recommender/docs/REPRODUCIBILITY.md`
-
-## Snapshot Metrics
+## Current Metrics
 - ROC-AUC: `0.8657`
 - PR-AUC: `0.8214`
 - F1: `0.7381`
 - NDCG@10: `0.8654`
-- Rolling-backtest output + cold-start fallback recommendations included
+- Attribution filtering keeps `89.82%` of rows and improves AUC from `0.8553` to `0.8657`
 
-## Local Data Contract
-Run the project with Spotify export folders present locally as siblings to this repo:
+## Repository Layout
+- `spotify-recommender/`: pipeline code and project docs
+- `spotify-recommender/src/`: modeling and visualization scripts
+- `spotify-recommender/outputs/`: generated metrics and recommendation artifacts (local)
+
+## Data Layout (Local)
+Expected sibling folders:
 - `../Spotify Account Data`
 - `../Spotify Extended Streaming History`
 - `../Spotify Technical Log Information`
 
-## Quick Start
+## Run
 ```bash
 cd spotify-recommender
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements-optional.txt
 python src/pipeline.py \
   --account-dir "../Spotify Account Data" \
   --extended-dir "../Spotify Extended Streaming History" \
   --tech-dir "../Spotify Technical Log Information" \
-  --output-dir "./outputs"
+  --output-dir "./outputs" \
+  --filter-primary-user true \
+  --primary-user-config "./primary_user_config.json" \
+  --favorite-artists-config "./favorite_artists.json"
+
+python src/visualize.py \
+  --scored-samples "./outputs/scored_samples.csv" \
+  --out-dir "./outputs/figures"
+
+python3 -m streamlit run app.py
 ```
 
 ## Privacy
 Ignored by git:
 - raw account/streaming/log exports
-- generated recommendation outputs and model metrics
+- generated personal recommendation outputs and model metrics
