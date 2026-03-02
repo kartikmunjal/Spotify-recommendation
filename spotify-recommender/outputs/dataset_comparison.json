@@ -1,0 +1,20 @@
+[
+  {
+    "dataset": "all_rows",
+    "rows": 240001,
+    "test_auc": 0.8553279096326654,
+    "test_pr_auc": 0.8053005189270105,
+    "test_accuracy": 0.7794629278556696,
+    "test_f1": 0.7223708366115918,
+    "test_logloss": 0.4628390025431989
+  },
+  {
+    "dataset": "primary_user_filtered",
+    "rows": 215569,
+    "test_auc": 0.8657193177447257,
+    "test_pr_auc": 0.821432896961862,
+    "test_accuracy": 0.7881198682562509,
+    "test_f1": 0.7380645161290323,
+    "test_logloss": 0.45175367335746863
+  }
+]

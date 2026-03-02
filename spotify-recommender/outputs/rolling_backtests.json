@@ -1,0 +1,38 @@
+[
+  {
+    "window_index": 1,
+    "train_rows": 150901,
+    "test_rows": 21556,
+    "test_start_ts": "2024-06-19T00:02:18Z",
+    "test_end_ts": "2024-12-05T00:13:08Z",
+    "test_auc": 0.8533693739962142,
+    "test_pr_auc": 0.7037730754489128,
+    "test_accuracy": 0.800658749304138,
+    "test_f1": 0.6358165946266632,
+    "test_logloss": 0.4257408829133129
+  },
+  {
+    "window_index": 2,
+    "train_rows": 172457,
+    "test_rows": 21556,
+    "test_start_ts": "2024-12-05T00:13:14Z",
+    "test_end_ts": "2025-08-12T22:23:05Z",
+    "test_auc": 0.8610115187522425,
+    "test_pr_auc": 0.817628555674194,
+    "test_accuracy": 0.7853497866023381,
+    "test_f1": 0.7340651761595495,
+    "test_logloss": 0.4577861017028272
+  },
+  {
+    "window_index": 3,
+    "train_rows": 194013,
+    "test_rows": 21556,
+    "test_start_ts": "2025-08-12T22:23:12Z",
+    "test_end_ts": "2026-02-18T23:59:16Z",
+    "test_auc": 0.8935774625405837,
+    "test_pr_auc": 0.8574012261822732,
+    "test_accuracy": 0.8119317127481908,
+    "test_f1": 0.7694232738027528,
+    "test_logloss": 0.4117142498761013
+  }
+]

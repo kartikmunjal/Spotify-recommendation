@@ -1,0 +1,101 @@
+uri,track_name,artist,artist_historical_plays,artist_completion_prior,popularity_component,cold_start_score,reason
+spotify:track:3NelcGZ46JmV9LqOD1pnxA,Faith (feat. Quavo),NAV,3518,0.827743,0.890148,0.846465,Cold-start fallback: artist prior + popularity
+spotify:track:1Faq8G2y56A8fRv7HsLq25,Wanted You (feat. Lil Uzi Vert),NAV,3518,0.827743,0.890148,0.846465,Cold-start fallback: artist prior + popularity
+spotify:track:3p6aRY0ePa28UM85z9X8iS,Good Intentions (Intro),NAV,3518,0.827743,0.890148,0.846465,Cold-start fallback: artist prior + popularity
+spotify:track:6xWqaVbmZJqEbUpFlIGiHK,Brown Boy,NAV,3518,0.827743,0.890148,0.846465,Cold-start fallback: artist prior + popularity
+spotify:track:0bMyxvtbPa7HFemLjzw0xX,Young Wheezy (with Gunna),NAV,3518,0.827743,0.890148,0.846465,Cold-start fallback: artist prior + popularity
+spotify:track:55aetJzZY4uHModJdaMf5i,"Mein Sharabi (From ""Cocktail"")",Imran Aziz,74,0.959459,0.470639,0.812813,Cold-start fallback: artist prior + popularity
+spotify:track:7lSZpgUg8R79pC49uc6IHX,Version Of Me,Sasha Alex Sloan,1690,0.807692,0.810261,0.808463,Cold-start fallback: artist prior + popularity
+spotify:track:377VZxggrGqZGSpQaTt6l2,Thank God,Sasha Alex Sloan,1690,0.807692,0.810261,0.808463,Cold-start fallback: artist prior + popularity
+spotify:track:4gbB4ORVF9jqFWgPF8277Z,Keep On,Sasha Alex Sloan,1690,0.807692,0.810261,0.808463,Cold-start fallback: artist prior + popularity
+spotify:track:7oHijHxh7cI40fNC4S619V,Runaway,Sasha Alex Sloan,1690,0.807692,0.810261,0.808463,Cold-start fallback: artist prior + popularity
+spotify:track:1D9XLqQp2YYiOxrr5KLb8K,Under Ground Kings,Drake,7454,0.734371,0.971981,0.805654,Cold-start fallback: artist prior + popularity
+spotify:track:2SAqBLGA283SUiwJ3xOUVI,Laugh Now Cry Later (feat. Lil Durk),Drake,7454,0.734371,0.971981,0.805654,Cold-start fallback: artist prior + popularity
+spotify:track:4Kz4RdRCceaA9VgTqBhBfa,The Motto,Drake,7454,0.734371,0.971981,0.805654,Cold-start fallback: artist prior + popularity
+spotify:track:7aqfrAY2p9BUSiupwk3svU,First Person Shooter (feat. J. Cole),Drake,7454,0.734371,0.971981,0.805654,Cold-start fallback: artist prior + popularity
+spotify:track:0TlLq3lA83rQOYtrqBqSct,Nonstop,Drake,7454,0.734371,0.971981,0.805654,Cold-start fallback: artist prior + popularity
+spotify:track:09ts3GnICqYEU5PkQCpJK3,Say Something (feat. Chris Stapleton),Justin Timberlake,898,0.826281,0.741391,0.800814,Cold-start fallback: artist prior + popularity
+spotify:track:3pD0f7hSJg2XdQ6udw5Tey,What Goes Around.../...Comes Around (Interlude),Justin Timberlake,898,0.826281,0.741391,0.800814,Cold-start fallback: artist prior + popularity
+spotify:track:0XNu9Mqd7TLnKRNVHpe6T5,Candle,Quinn XCII,3493,0.757515,0.889371,0.797072,Cold-start fallback: artist prior + popularity
+spotify:track:4IaizE26moyyMYn70TeFiX,We Don’t Talk Enough (with Alexander 23),Quinn XCII,3493,0.757515,0.889371,0.797072,Cold-start fallback: artist prior + popularity
+spotify:track:4CxmynXhw78QefruycvxG8,Coffee (feat. Marc E. Bassy),Quinn XCII,3493,0.757515,0.889371,0.797072,Cold-start fallback: artist prior + popularity
+spotify:track:6SGG5AxHShqSYiV9fCWpZz,Stay Next To Me (with Chelsea Cutler),Quinn XCII,3493,0.757515,0.889371,0.797072,Cold-start fallback: artist prior + popularity
+spotify:track:51LIqkda3pTeECZUhMnool,Straightjacket,Quinn XCII,3493,0.757515,0.889371,0.797072,Cold-start fallback: artist prior + popularity
+spotify:track:1NgCWYuBLfqBDA3b8MgSVU,Twenty One,Khalid,3167,0.761604,0.878694,0.796731,Cold-start fallback: artist prior + popularity
+spotify:track:1ToprX3cpBiXoAe5eNSk74,Eleven,Khalid,3167,0.761604,0.878694,0.796731,Cold-start fallback: artist prior + popularity
+spotify:track:5Z3GHaZ6ec9bsiI5BenrbY,Young Dumb & Broke,Khalid,3167,0.761604,0.878694,0.796731,Cold-start fallback: artist prior + popularity
+spotify:track:1DUSuNhF8P5vUGNPpQiZa5,My Bad,Khalid,3167,0.761604,0.878694,0.796731,Cold-start fallback: artist prior + popularity
+spotify:track:0rTV5WefWd1J3OwIheTzxM,Talk,Khalid,3167,0.761604,0.878694,0.796731,Cold-start fallback: artist prior + popularity
+spotify:track:6yHjnt2AVTo0zjuWUiZpmf,Paaji Tussi Such A Pussy Cat,Amitabh Bhattacharya,57,0.947368,0.442619,0.795944,Cold-start fallback: artist prior + popularity
+spotify:track:7diY4bRXZ7ca6BEGNlz3xL,Molly In Mexico,Lauv,2098,0.778837,0.833822,0.795333,Cold-start fallback: artist prior + popularity
+spotify:track:732Sqj2piYPhdMPENP4axz,Easy Love,Lauv,2098,0.778837,0.833822,0.795333,Cold-start fallback: artist prior + popularity
+spotify:track:0pCxQv8dlUNFvWaySFx6y7,Easy Love,Lauv,2098,0.778837,0.833822,0.795333,Cold-start fallback: artist prior + popularity
+spotify:track:2MOoIbJWIYikwIXjBDe26i,Paris in the Rain,Lauv,2098,0.778837,0.833822,0.795333,Cold-start fallback: artist prior + popularity
+spotify:track:2FqqVHvC4eKrsk97vpMRid,Focus (feat. 21 Savage),Bazzi,2081,0.778952,0.832936,0.795147,Cold-start fallback: artist prior + popularity
+spotify:track:4zYSbuAuRUlHPfTItmwLvs,Fallin (feat. 6LACK),Bazzi,2081,0.778952,0.832936,0.795147,Cold-start fallback: artist prior + popularity
+spotify:track:4a6q8CR2hzLk2plDkSxkfD,I.F.L.Y.,Bazzi,2081,0.778952,0.832936,0.795147,Cold-start fallback: artist prior + popularity
+spotify:track:1kFToCzZBG7clK0axbKVWH,Alone,Bazzi,2081,0.778952,0.832936,0.795147,Cold-start fallback: artist prior + popularity
+spotify:track:5YLHLxoZsodDWjqSgjhBf3,Myself,Bazzi,2081,0.778952,0.832936,0.795147,Cold-start fallback: artist prior + popularity
+spotify:track:6uS92ioIjB9Dft28qvNu6v,Cheez Badi,Aashiq Raj,10,1.0,0.261389,0.778417,Cold-start fallback: artist prior + popularity
+spotify:track:6XdHZr9iXdqc4Q76wtgbqr,The Way You Felt,Alec Benjamin,991,0.788093,0.752122,0.777302,Cold-start fallback: artist prior + popularity
+spotify:track:0Do59HJNKcUliLc888Y2eT,Woodstock (Psychedelic Fiction),Jon Bellion,3507,0.727402,0.889807,0.776124,Cold-start fallback: artist prior + popularity
+spotify:track:1zTW7xRtxmprjTUDi6bAHg,Woke The F*ck Up,Jon Bellion,3507,0.727402,0.889807,0.776124,Cold-start fallback: artist prior + popularity
+spotify:track:48LwbDH7u5UMrsY3sjfjhe,Overwhelming,Jon Bellion,3507,0.727402,0.889807,0.776124,Cold-start fallback: artist prior + popularity
+spotify:track:0SuLAslEMFZAXf0SwY7syi,All Time Low,Jon Bellion,3507,0.727402,0.889807,0.776124,Cold-start fallback: artist prior + popularity
+spotify:track:0FcVZWtHJ0XoHhbT8fiyAg,KID AGAIN,Jon Bellion,3507,0.727402,0.889807,0.776124,Cold-start fallback: artist prior + popularity
+spotify:track:3a1lNhkSLSkpJE4MSHpDu9,Congratulations,Post Malone,4142,0.718011,0.907943,0.77499,Cold-start fallback: artist prior + popularity
+spotify:track:5IZXB5IKAD2qlvTPJYDCFB,I Had Some Help (Feat. Morgan Wallen),Post Malone,4142,0.718011,0.907943,0.77499,Cold-start fallback: artist prior + popularity
+spotify:track:688QpQAwqsLdBR6lr13wK1,Same Bitches (feat. G-Eazy & YG),Post Malone,4142,0.718011,0.907943,0.77499,Cold-start fallback: artist prior + popularity
+spotify:track:40uMIn2zJLAQhNXghRjBed,Motley Crew,Post Malone,4142,0.718011,0.907943,0.77499,Cold-start fallback: artist prior + popularity
+spotify:track:5VuxWXbt7XENQCtE9TzpTv,Spoil My Night (feat. Swae Lee),Post Malone,4142,0.718011,0.907943,0.77499,Cold-start fallback: artist prior + popularity
+spotify:track:3VMSMjB4Yx79FDDrmYCk3N,Bailando - English Version,Enrique Iglesias,489,0.813906,0.675237,0.772305,Cold-start fallback: artist prior + popularity
+spotify:track:3rDFqo8yv93PtTmdOYOPzX,Tonight (I'm Fuckin' You),Enrique Iglesias,489,0.813906,0.675237,0.772305,Cold-start fallback: artist prior + popularity
+spotify:track:1yM7GIEJ2QniupkEHOyp0a,Bailando - English Version,Enrique Iglesias,489,0.813906,0.675237,0.772305,Cold-start fallback: artist prior + popularity
+spotify:track:6p4hG0n7UCqfSBoO4n3hQI,Hey Homie (TroyBoi Remix),SOFI TUKKER,8,1.0,0.239514,0.771854,Cold-start fallback: artist prior + popularity
+spotify:track:2D2w9943rsnJOGCrI4aMQp,My Choppa Hate Niggas,21 Savage,3022,0.718068,0.873587,0.764723,Cold-start fallback: artist prior + popularity
+spotify:track:47yD0e9MCRIB8dgUXPfyW3,pop ur shit,21 Savage,3022,0.718068,0.873587,0.764723,Cold-start fallback: artist prior + popularity
+spotify:track:0tdCy39PgWN8LFWu34ORn3,Rap Saved Me (feat. Quavo),21 Savage,3022,0.718068,0.873587,0.764723,Cold-start fallback: artist prior + popularity
+spotify:track:50I7FNN2rl2rWiNwGxS146,No Opp Left Behind,21 Savage,3022,0.718068,0.873587,0.764723,Cold-start fallback: artist prior + popularity
+spotify:track:1vc2YF7ZvUtwr45HNpdGch,Numb,21 Savage,3022,0.718068,0.873587,0.764723,Cold-start fallback: artist prior + popularity
+spotify:track:4F7A0DXBrmUAkp32uenhZt,Party Monster,The Weeknd,2144,0.73181,0.836185,0.763122,Cold-start fallback: artist prior + popularity
+spotify:track:7MXVkk9YMctZqd1Srtv4MB,Starboy,The Weeknd,2144,0.73181,0.836185,0.763122,Cold-start fallback: artist prior + popularity
+spotify:track:7fBv7CLKzipRk6EC6TWHOB,The Hills,The Weeknd,2144,0.73181,0.836185,0.763122,Cold-start fallback: artist prior + popularity
+spotify:track:0VjIjW4GlUZAMYd2vXMi3b,Blinding Lights,The Weeknd,2144,0.73181,0.836185,0.763122,Cold-start fallback: artist prior + popularity
+spotify:track:38KsRHYE10bG0paU78gL9r,me & ur ghost,blackbear,835,0.77006,0.733471,0.759083,Cold-start fallback: artist prior + popularity
+spotify:track:07cDm2mEYe7KHCHjKYSGdU,wanderlust,blackbear,835,0.77006,0.733471,0.759083,Cold-start fallback: artist prior + popularity
+spotify:track:1wsZ0cp5He4Wm4yohNjwIs,idfc - Tarro Remix,blackbear,835,0.77006,0.733471,0.759083,Cold-start fallback: artist prior + popularity
+spotify:track:2RZ8SjEJYJHZ8YCUzls77w,Flags,Coldplay,1482,0.741565,0.795954,0.757882,Cold-start fallback: artist prior + popularity
+spotify:track:3RiPr603aXAoi4GHyXx0uy,Hymn for the Weekend,Coldplay,1482,0.741565,0.795954,0.757882,Cold-start fallback: artist prior + popularity
+spotify:track:69uxyAqqPIsUyTO8txoP2M,Adventure of a Lifetime,Coldplay,1482,0.741565,0.795954,0.757882,Cold-start fallback: artist prior + popularity
+spotify:track:6XJ2PVp2Vs9G2j5B2Cbbnb,Princess of China - Radio Edit,Coldplay,1482,0.741565,0.795954,0.757882,Cold-start fallback: artist prior + popularity
+spotify:track:4q6oNFTjZmJqkIgPdp8iR1,Lord Willin',Logic,2514,0.716388,0.853532,0.757531,Cold-start fallback: artist prior + popularity
+spotify:track:2c8sgbZoEanC3QyFNZxUcA,Flexicution,Logic,2514,0.716388,0.853532,0.757531,Cold-start fallback: artist prior + popularity
+spotify:track:5LME7YULt0enp6UAB8VoDn,Under Pressure,Logic,2514,0.716388,0.853532,0.757531,Cold-start fallback: artist prior + popularity
+spotify:track:1GtVGc1UYin3zpMUdNSSpM,Midnight,Logic,2514,0.716388,0.853532,0.757531,Cold-start fallback: artist prior + popularity
+spotify:track:6IlQTriFgUeEbVx3Y10sia,Driving Ms Daisy,Logic,2514,0.716388,0.853532,0.757531,Cold-start fallback: artist prior + popularity
+spotify:track:2dEfpsiyIttecwUxkGH2yD,Tu Jaane Na - Unplugged Version,Pritam,1883,0.71641,0.822043,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:2nNaw1QUcqiEX6pBFxcpp3,Marjaani,Pritam,1883,0.71641,0.822043,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:71s7tZo8OGlN3VXyURWLUr,Make Some Noise For The Desi Boyz,Pritam,1883,0.71641,0.822043,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:0dLbrlAVPPjpPqnYfmJsWk,Tera Hone Laga Hoon,Pritam,1883,0.71641,0.822043,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:5Rn1DPzSzUktbhuNDDJocS,Party On My Mind,Pritam,1883,0.71641,0.822043,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:6NTwjo8MMAg0Ht2OlKdDir,Brown Rang,Yo Yo Honey Singh,1801,0.71849,0.817192,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:7m4CgL81VVIHaaiSxyH922,Desi Kalakaar,Yo Yo Honey Singh,1801,0.71849,0.817192,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:2FZiKJgWcqwLJ2GYnYuUri,Birthday Bash,Yo Yo Honey Singh,1801,0.71849,0.817192,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:7wW9scVNLYFLsmBb1yAUmS,Blue Eyes,Yo Yo Honey Singh,1801,0.71849,0.817192,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:3VXh3jYTW3lTxtXRnu2TKP,Lungi Dance,Yo Yo Honey Singh,1801,0.71849,0.817192,0.7481,Cold-start fallback: artist prior + popularity
+spotify:track:4Zuei1UAP5pB5ovra9dnnp,Khwaja Mere Khwaja,A.R. Rahman,554,0.770758,0.688815,0.746175,Cold-start fallback: artist prior + popularity
+spotify:track:5huOzlgCK7PsMSG4TFBvKY,Two High,Moon Taxi,276,0.800725,0.61306,0.744425,Cold-start fallback: artist prior + popularity
+spotify:track:6raJtpmRk6O6hhQ4juXY0V,Ampersand,20syl,295,0.79661,0.620292,0.743715,Cold-start fallback: artist prior + popularity
+spotify:track:0bxoiLuzBhL2B3ODrAU6cp,Voices,20syl,295,0.79661,0.620292,0.743715,Cold-start fallback: artist prior + popularity
+spotify:track:4gkl7QbQvBd3TM9PhlWFkI,Love Yourz,J. Cole,1967,0.707168,0.826798,0.743057,Cold-start fallback: artist prior + popularity
+spotify:track:2JvzF1RMd7lE3KmFlsyZD8,MIDDLE CHILD,J. Cole,1967,0.707168,0.826798,0.743057,Cold-start fallback: artist prior + popularity
+spotify:track:5W8jRrZ6tWrTrqnKRtIQBf,p r i d e . i s . t h e . d e v i l (with Lil Baby),J. Cole,1967,0.707168,0.826798,0.743057,Cold-start fallback: artist prior + popularity
+spotify:track:7yotKA30dwTKNEGomV9ZsI,KOD,J. Cole,1967,0.707168,0.826798,0.743057,Cold-start fallback: artist prior + popularity
+spotify:track:0GAyuCo975IHGxxiLKDufB,l e t . g o . m y . h a n d (with Bas & 6LACK),J. Cole,1967,0.707168,0.826798,0.743057,Cold-start fallback: artist prior + popularity
+spotify:track:4gbVRS8gloEluzf0GzDOFc,Maps,Maroon 5,760,0.744737,0.723225,0.738283,Cold-start fallback: artist prior + popularity
+spotify:track:6tHQAadcluhVV4oD2IvHSk,Lost,Maroon 5,760,0.744737,0.723225,0.738283,Cold-start fallback: artist prior + popularity
+spotify:track:5zFglKYiknIxks8geR8rcL,Beautiful Mistakes (feat. Megan Thee Stallion),Maroon 5,760,0.744737,0.723225,0.738283,Cold-start fallback: artist prior + popularity
+spotify:track:0xfbtk4ri9aDhbqHyVMIY7,Bossin',Arizona Zervas,462,0.766234,0.669059,0.737081,Cold-start fallback: artist prior + popularity
+spotify:track:696DnlkuDOXcMAnKlTgXXK,ROXANNE,Arizona Zervas,462,0.766234,0.669059,0.737081,Cold-start fallback: artist prior + popularity
+spotify:track:58q2HKrzhC3ozto2nDdN4z,I Like It,Cardi B,435,0.767816,0.662509,0.736224,Cold-start fallback: artist prior + popularity
+spotify:track:0dIoGTQXDh1wVnhIiSyYEa,Bartier Cardi (feat. 21 Savage),Cardi B,435,0.767816,0.662509,0.736224,Cold-start fallback: artist prior + popularity

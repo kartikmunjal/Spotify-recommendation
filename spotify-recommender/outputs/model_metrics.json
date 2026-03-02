@@ -1,0 +1,22 @@
+{
+  "train_rows": 172455,
+  "test_rows": 43114,
+  "test_auc": 0.8657193177447257,
+  "test_pr_auc": 0.821432896961862,
+  "test_accuracy": 0.7881198682562509,
+  "test_f1": 0.7380645161290323,
+  "base_completion_rate_test": 0.40494966832119494,
+  "base_completion_rate_train": 0.6029978835058422,
+  "train_logloss": 0.18988390058976312,
+  "test_logloss": 0.45175367335746863,
+  "ranking_sessions_evaluated": 1480,
+  "ndcg@5": 0.8529369363294022,
+  "map@5": 0.7864144144144145,
+  "recall@5": 0.5324670643578157,
+  "ndcg@10": 0.8653777561513232,
+  "map@10": 0.7777244191470382,
+  "recall@10": 0.7451282140402238,
+  "attribution_rows_kept": 215569,
+  "attribution_rows_total": 240001,
+  "attribution_row_coverage": 0.8982004241648993
+}

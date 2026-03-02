@@ -1,0 +1,69 @@
+feature,coefficient,abs_coefficient
+recent_skip_rate_10,-1.42854823,1.42854823
+reason_end=trackdone,0.61747081,0.61747081
+track_train_skip_rate,-0.60486393,0.60486393
+ms_played,0.54482927,0.54482927
+platform=ios,-0.53461047,0.53461047
+conn_country=US,0.39426721,0.39426721
+reason_end=fwdbtn,-0.29635663,0.29635663
+artist_train_skip_rate,-0.22453172,0.22453172
+"platform=iOS 14.6 (iPhone13,3)",0.18189145,0.18189145
+reason_start=trackdone,0.18093323,0.18093323
+"platform=Android OS 9 API 28 (OnePlus, ONEPLUS A5010)",0.16470599,0.16470599
+reason_end=endplay,-0.12193253,0.12193253
+reason_end=logout,0.09829211,0.09829211
+session_position,-0.09574219,0.09574219
+reason_end=unexpected-exit-while-paused,0.08869045,0.08869045
+"platform=iOS 14.4.2 (iPhone13,3)",0.07897331,0.07897331
+"platform=iOS 15.4.1 (iPhone13,3)",0.07824021,0.07824021
+"platform=iOS 15.1.1 (iPhone13,3)",0.07561781,0.07561781
+reason_start=fwdbtn,0.07198503,0.07198503
+"platform=iOS 14.4 (iPhone13,3)",0.07135523,0.07135523
+reason_start=clickrow,0.06573041,0.06573041
+"platform=iOS 15.3.1 (iPhone13,3)",0.06372725,0.06372725
+hour,-0.05814902,0.05814902
+platform=not_applicable,-0.05350701,0.05350701
+"platform=iOS 15.6.1 (iPhone14,2)",0.05282842,0.05282842
+"platform=iOS 15.5 (iPhone14,2)",0.04999562,0.04999562
+"platform=iOS 14.8 (iPhone13,3)",0.0499433,0.0499433
+"platform=iOS 14.2.1 (iPhone13,3)",0.03545223,0.03545223
+reason_start=playbtn,0.03132126,0.03132126
+"platform=iOS 15.6 (iPhone14,2)",0.02896264,0.02896264
+artist_train_plays,-0.01914901,0.01914901
+reason_start=appload,0.01568963,0.01568963
+reason_start=remote,0.01542266,0.01542266
+track_train_plays,-0.01425737,0.01425737
+reason_end=remote,0.01376259,0.01376259
+reason_start=backbtn,0.01373073,0.01373073
+"platform=iOS 15.4.1 (iPhone14,2)",0.01256178,0.01256178
+month,-0.00925207,0.00925207
+reason_end=backbtn,-0.00883345,0.00883345
+"platform=Android OS 10 API 29 (samsung, SM-G960U)",0.00788522,0.00788522
+platform=Windows 10 (10.0.18363; x64; AppX),0.00760659,0.00760659
+is_weekend,0.00615785,0.00615785
+"platform=iOS 15.5 (iPhone13,3)",0.00586358,0.00586358
+platform=Windows 10 (10.0.18362; x64; AppX),0.00521559,0.00521559
+platform=Windows 10 (10.0.19042; x64; AppX),0.00486305,0.00486305
+reason_end=unexpected-exit,0.00235169,0.00235169
+"platform=Android OS 10 API 29 (OnePlus, ONEPLUS A6013)",0.00204902,0.00204902
+platform=tizen,0.00200928,0.00200928
+"platform=iOS 14.2 (iPhone13,3)",0.00165932,0.00165932
+reason_end=unknown,0.00132232,0.00132232
+platform=osx,-0.00121979,0.00121979
+reason_start=unknown,0.00113339,0.00113339
+platform=Linux [x86-64 0],0.00102999,0.00102999
+reason_start=trackerror,-0.00076982,0.00076982
+conn_country=IN,0.00075695,0.00075695
+platform=android,0.00068452,0.00068452
+platform=Partner tizen_tv samsung;QN65Q70RAFXZA;568a50c7e7f64fe3b44a3316ef5590fd;;tpapi,0.00041437,0.00041437
+reason_end=trackerror,0.00040914,0.00040914
+platform=Windows 10 (10.0.19044; x64; AppX),0.00031029,0.00031029
+day_of_week,-0.00028279,0.00028279
+platform=Partner google cast_voice;Google_Home_Mini;;3.5.2--1.49.222572,0.00027794,0.00027794
+platform=cast,0.00023728,0.00023728
+conn_country=FR,0.00015234,0.00015234
+platform=Partner google cast_voice;Google_Home_Mini;;3.4.1--1.49.222572,8.289e-05,8.289e-05
+platform=Partner roku_tv roku;3600x;4916bf2fd1c54ff2bace038314d21f39;;tpapi,5.329e-05,5.329e-05
+"platform=Android OS 10 API 29 (samsung, SM-A750F)",1.632e-05,1.632e-05
+connection_error_count,0.0,0.0
+playback_error_count,0.0,0.0

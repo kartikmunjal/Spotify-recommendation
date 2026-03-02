@@ -1,0 +1,18 @@
+{
+  "filter_enabled": true,
+  "sessions_total": 11004,
+  "sessions_kept": 8740,
+  "rows_total": 240001,
+  "rows_kept": 215569,
+  "row_coverage": 0.8982004241648993,
+  "home_country": "US",
+  "primary_platforms": [
+    "ios",
+    "osx"
+  ],
+  "driving_platform_hints": [
+    "cast",
+    "not_applicable",
+    "tizen"
+  ]
+}

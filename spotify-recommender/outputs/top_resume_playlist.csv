@@ -1,0 +1,101 @@
+uri,track_name,artist,plays,actual_completion_rate,bayesian_completion_rate,artist_completion_prior,predicted_completion_rate,score,reason
+spotify:track:4SHKs8ugjoATC3MgVym7Gs,Vetement Socks,NAV,93,0.978495,0.971996,0.896448,0.965904,0.927694,High confidence from repeated positive listening history
+spotify:track:1EBFDh7NkQqI80564tQaUq,"Main Sharabi (From ""Cocktail"")",Imran Aziz,74,0.959459,0.959459,0.959459,0.945258,0.920525,High confidence from repeated positive listening history
+spotify:track:0rL450mFk9mVgcShDhGW2t,Cruel Intentions,Delacey,94,1.0,0.987752,0.843844,0.959077,0.920096,High confidence from repeated positive listening history
+spotify:track:5doYtCoJ8KpfkFczP3F2ad,Dooriyan,Mohit Chauhan,135,0.97037,0.960711,0.7977,0.970937,0.914448,High confidence from repeated positive listening history
+spotify:track:6SGG5AxHShqSYiV9fCWpZz,Stay Next To Me (with Chelsea Cutler),Quinn XCII,118,1.0,0.985731,0.775256,0.966336,0.914132,High confidence from repeated positive listening history
+spotify:track:4ZtFanR9U6ndgddUvNcjcG,good 4 u,Olivia Rodrigo,30,1.0,1.0,1.0,0.96207,0.910505,High confidence from repeated positive listening history
+spotify:track:2fQrGHiQOvpL9UgPvtYy6G,Bank Account,21 Savage,136,1.0,0.985577,0.740387,0.959221,0.906699,High confidence from repeated positive listening history
+spotify:track:0C9g70hdhr7W3HCs3ITUYz,No Scrubs,Unlike Pluto feat. Joanna Jones,23,1.0,1.0,1.0,0.966614,0.896011,High confidence from repeated positive listening history
+spotify:track:62vpWI1CHwFy7tMIcSStl8,No Role Modelz,J. Cole,135,1.0,0.981794,0.674569,0.962752,0.893927,High confidence from repeated positive listening history
+spotify:track:4hqOmrCCJKyiuwDexd8c2t,Price On My Head (feat. The Weeknd),NAV,225,0.911111,0.910608,0.896448,0.899919,0.892115,High confidence from repeated positive listening history
+spotify:track:4v2sn6bAwasHE6SPY0zil2,My Wife & 2 Dogs,Quinn XCII,65,1.0,0.975371,0.775256,0.956082,0.891125,High confidence from repeated positive listening history
+spotify:track:6Ius4TC0L3cN74HT7ENE6e,Wet Dreamz,J. Cole,103,1.0,0.976546,0.674569,0.9642,0.887625,High confidence from repeated positive listening history
+spotify:track:59fFsGRwFiuhxKDPc1k6xW,Opp Stoppa (feat. 21 Savage),YBN Nahmir,30,1.0,0.973684,0.875,0.977095,0.885078,High confidence from repeated positive listening history
+spotify:track:09PGubKAMryhOWv1LHpCYz,"fuck, i'm lonely",Lauv,130,1.0,0.977958,0.619769,0.97086,0.884802,High confidence from repeated positive listening history
+spotify:track:6NTwjo8MMAg0Ht2OlKdDir,Brown Rang,Yo Yo Honey Singh,75,1.0,0.969111,0.679529,0.971183,0.881357,High confidence from repeated positive listening history
+spotify:track:0PKEQjnGn0LmPjozJ3t4MF,Main Bola Hey!,Karthik Rao,107,0.897196,0.900772,0.948598,0.884593,0.881069,High confidence from repeated positive listening history
+spotify:track:2mt1IqcFyY1zmYZT8Q3xw9,hot girl bummer,blackbear,98,1.0,0.974152,0.657519,0.960213,0.880659,High confidence from repeated positive listening history
+spotify:track:3GXQOlfK0oPdsW6Y5ptII6,Hypochondriac,Sasha Alex Sloan,124,0.943548,0.934307,0.791073,0.916822,0.878748,High confidence from repeated positive listening history
+spotify:track:0LnlTTgv5253a2I287jiuq,Patang,Nilotpal Bora,104,0.894231,0.894231,0.894231,0.909385,0.878524,High confidence from repeated positive listening history
+spotify:track:6PERP62TejQjgHu81OHxgM,good 4 u,Olivia Rodrigo,16,1.0,1.0,1.0,0.986263,0.877873,High confidence from repeated positive listening history
+spotify:track:6AyXdUH0gnVrJFQb7L7rkI,Make It Right Back,NAV,31,0.967742,0.953118,0.896448,0.959859,0.876984,High confidence from repeated positive listening history
+spotify:track:4gkl7QbQvBd3TM9PhlWFkI,Love Yourz,J. Cole,61,1.0,0.962269,0.674569,0.981025,0.876113,High confidence from repeated positive listening history
+spotify:track:1vc2YF7ZvUtwr45HNpdGch,Numb,21 Savage,50,1.0,0.964191,0.740387,0.966534,0.876048,High confidence from repeated positive listening history
+spotify:track:3uc8AGNL0KbvISIrjnfRvN,Mean It,Lauv,107,1.0,0.973549,0.619769,0.96207,0.875772,High confidence from repeated positive listening history
+spotify:track:4LeJfeJ9u53QLp997SRhim,Freshman List,NAV,28,1.0,0.976989,0.896448,0.94939,0.874692,High confidence from repeated positive listening history
+spotify:track:2vV6LiBLvVXMBJTyO1ptlz,Heart Attack,Enrique Iglesias,94,0.914894,0.912159,0.880024,0.897938,0.874645,High confidence from repeated positive listening history
+spotify:track:3QGppKBPd9gHOgHJzRbVIw,Hate The Way (feat. blackbear),G-Eazy,139,0.964029,0.94777,0.665279,0.94398,0.872622,High confidence from repeated positive listening history
+spotify:track:3rDFqo8yv93PtTmdOYOPzX,Tonight (I'm Fuckin' You),Enrique Iglesias,174,0.885057,0.884836,0.880024,0.889821,0.872484,High confidence from repeated positive listening history
+spotify:track:0s26En1JoJhVj32vizElpA,Feelings,Lauv,97,1.0,0.97103,0.619769,0.959616,0.871758,High confidence from repeated positive listening history
+spotify:track:2P91MQbaiQOfbiz9VqhqKQ,I Like Me Better,Lauv,97,1.0,0.97103,0.619769,0.959028,0.8715,High confidence from repeated positive listening history
+spotify:track:3JJYIoJ5FyY9E0DGjr7SXF,Enemies,Lauv,92,1.0,0.969582,0.619769,0.960294,0.870368,High confidence from repeated positive listening history
+spotify:track:6LVsIWAAQwGjHMv7SOQjnY,BRB,Bazzi,38,1.0,0.957059,0.753088,0.976385,0.868659,High confidence from repeated positive listening history
+spotify:track:7zxRMhXxJMQCeDDg0rKAVo,Some Way,NAV,216,0.884259,0.884695,0.896448,0.86429,0.86689,High confidence from repeated positive listening history
+spotify:track:4vjpLMyL3ZO6aphdYr8XYw,i'm so tired...,Lauv,84,1.0,0.966936,0.619769,0.958291,0.866416,High confidence from repeated positive listening history
+spotify:track:6Rf3dWdNQs5LTqFOiavqQr,Canada (feat. Alessia Cara),Lauv,87,1.0,0.967981,0.619769,0.95499,0.866187,High confidence from repeated positive listening history
+spotify:track:1Fo4OvzP9PThFKMeMIAEYu,Superhero,Lauv,86,1.0,0.96764,0.619769,0.954767,0.865694,High confidence from repeated positive listening history
+spotify:track:6yHjnt2AVTo0zjuWUiZpmf,Paaji Tussi Such A Pussy Cat,Amitabh Bhattacharya,55,0.945455,0.927754,0.806061,0.932796,0.865431,High confidence from repeated positive listening history
+spotify:track:4rHZZAmHpZrA3iH5zx8frV,Mirrors,Justin Timberlake,171,0.883041,0.87937,0.800914,0.911986,0.864616,High confidence from repeated positive listening history
+spotify:track:7cDpMO5wuWgvv3j4INRBeB,Changes,Lauv,75,1.0,0.963351,0.619769,0.962462,0.864068,High confidence from repeated positive listening history
+spotify:track:7fJozqj7NMdvo0zkcXDbgg,Area,MagnusTheMagnus,15,1.0,1.0,1.0,0.963791,0.86395,High confidence from repeated positive listening history
+spotify:track:3OZr3vo7SmYpn5XqeQEAOM,Manali Trance,Yo Yo Honey Singh,91,0.967033,0.9438,0.679529,0.937613,0.863042,High confidence from repeated positive listening history
+spotify:track:4pJzUvwU5ufYr8rLdQ6aYK,Daddy (feat. Quinn XCII),Tiny Meat Gang,23,0.956522,0.956522,0.956522,0.938036,0.862559,High confidence from repeated positive listening history
+spotify:track:2GYOQSptG986qizKejotzz,Vetement Socks,NAV,336,0.860119,0.860964,0.896448,0.862886,0.861853,High confidence from repeated positive listening history
+spotify:track:6k7o3KrLtM6xfcszKVVNrZ,Changed,Bazzi,43,0.976744,0.941661,0.753088,0.95403,0.859578,High confidence from repeated positive listening history
+spotify:track:14SaZBTjxlorHJQxXh01Hu,Girls Need Love (with Drake) - Remix,Summer Walker,15,1.0,1.0,1.0,0.952041,0.859306,High confidence from repeated positive listening history
+spotify:track:3Xp7ctMGuyhU8riWFR6a36,Young Wheezy (with Gunna),NAV,161,0.875776,0.876755,0.896448,0.860564,0.858937,High confidence from repeated positive listening history
+spotify:track:4Oun2ylbjFKMPTiaSbbCih,WAP (feat. Megan Thee Stallion),Cardi B,39,0.974359,0.947187,0.814722,0.9308,0.858909,High confidence from repeated positive listening history
+spotify:track:3GKSfF6c3Rv3a1knSjxnXa,Nina,Ed Sheeran,45,1.0,0.949921,0.668226,0.978979,0.858759,High confidence from repeated positive listening history
+spotify:track:16JTNTeItVSx5wNtAXGTSJ,Tonight (I'm Fuckin' You),Enrique Iglesias,22,1.0,0.968006,0.880024,0.957865,0.857567,High confidence from repeated positive listening history
+spotify:track:0WTN7om3lHG3yYMigwzBxl,There's No Way (feat. Julia Michaels),Lauv,68,1.0,0.959976,0.619769,0.956315,0.857487,High confidence from repeated positive listening history
+spotify:track:3KkWGDCb6byHjNYjxBihGK,Habits,NAV,186,0.865591,0.866864,0.896448,0.860415,0.857324,High confidence from repeated positive listening history
+spotify:track:7qLnSuxwLNlcapat8OCWZp,Ela É do Tipo (feat. Drake) - Remix,MC Kevin o Chris,15,1.0,1.0,1.0,0.945216,0.856609,High confidence from repeated positive listening history
+spotify:track:6HU7h9RYOaPRFeh0R3UeAr,deja vu,Olivia Rodrigo,13,1.0,1.0,1.0,0.971606,0.855593,High confidence from repeated positive listening history
+spotify:track:6XdHZr9iXdqc4Q76wtgbqr,The Way You Felt,Alec Benjamin,72,0.916667,0.906196,0.811959,0.903481,0.855113,High confidence from repeated positive listening history
+spotify:track:2alc8VZAzDgdAsL2QMk3hu,Skechers,DripReport,16,1.0,0.981481,0.944444,0.967378,0.854826,High confidence from repeated positive listening history
+spotify:track:6fEJ1nO1u301h8wbBeB4qu,Repercussions (with Young Thug),NAV,137,0.868613,0.870149,0.896448,0.859447,0.853782,High confidence from repeated positive listening history
+spotify:track:1rX5L6pyl3rVWb55D8Cprr,Gold Roses (feat. Drake),Rick Ross,14,1.0,1.0,1.0,0.95173,0.85377,High confidence from repeated positive listening history
+spotify:track:0e8nrvls4Qqv5Rfa2UhqmO,THATS WHAT I WANT,Lil Nas X,32,1.0,0.953545,0.767724,0.957172,0.853752,High confidence from repeated positive listening history
+spotify:track:2b8fOow8UzyDFAE27YhOZM,Memories,Maroon 5,45,1.0,0.953145,0.689584,0.954871,0.853598,High confidence from repeated positive listening history
+spotify:track:1DVWkJEjgVStgU2EbR9vpz,Sad Forever,Lauv,55,1.0,0.951717,0.619769,0.965234,0.851792,High confidence from repeated positive listening history
+spotify:track:0PdwDpafg7Nz5TrL6U2anU,Present,Khalid,57,0.964912,0.932228,0.699355,0.938367,0.850146,High confidence from repeated positive listening history
+spotify:track:4fFfyouye6vrX9o9z4PVMu,Never Not,Lauv,62,1.0,0.956545,0.619769,0.946969,0.849485,High confidence from repeated positive listening history
+spotify:track:38KsRHYE10bG0paU78gL9r,me & ur ghost,blackbear,42,1.0,0.945203,0.657519,0.971905,0.8493,High confidence from repeated positive listening history
+spotify:track:4lHBn99hzTKCqmEGoZaZcL,Vaccine,Logic,25,1.0,0.94866,0.788224,0.973302,0.848951,High confidence from repeated positive listening history
+spotify:track:4f1XXGjZZ9EkFkrbPJek6X,gun smoke,21 Savage,38,0.973684,0.933111,0.740387,0.951108,0.84772,High confidence from repeated positive listening history
+spotify:track:12VWzyPDBCc8fqeWCAfNwR,One Dance,Drake,49,1.0,0.945578,0.612242,0.972832,0.847398,High confidence from repeated positive listening history
+spotify:track:732Sqj2piYPhdMPENP4axz,Easy Love,Lauv,57,0.982456,0.937818,0.619769,0.962552,0.847201,High confidence from repeated positive listening history
+spotify:track:37Nqx7iavZpotJSDXZWbJ3,Girls Want Girls (with Lil Baby),Drake,72,0.986111,0.948724,0.612242,0.940346,0.846939,High confidence from repeated positive listening history
+spotify:track:5OALKVYKv1osH86m2WDqKW,Dreamers - Tep No Remix,The Royal Foundry,21,1.0,0.965032,0.873239,0.941807,0.845828,High confidence from repeated positive listening history
+spotify:track:74BIr8H03lr5L6LZ1friIa,Dead People,21 Savage,31,1.0,0.946746,0.740387,0.958272,0.84528,High confidence from repeated positive listening history
+spotify:track:4Q34FP1AT7GEl9oLgNtiWj,Mr. Right Now (feat. Drake),21 Savage,322,0.888199,0.884615,0.740387,0.877332,0.845259,High confidence from repeated positive listening history
+spotify:track:3NelcGZ46JmV9LqOD1pnxA,Faith (feat. Quavo),NAV,164,0.835366,0.838207,0.896448,0.858826,0.845148,High confidence from repeated positive listening history
+spotify:track:0BPPXRTLzEySdF5DZm0Hmg,Gone,Bazzi,35,0.971429,0.930807,0.753088,0.949129,0.844675,High confidence from repeated positive listening history
+spotify:track:7cM9Kqto11iJpY2RwgVJSq,Flare Guns,Quinn XCII,183,0.885246,0.880639,0.775256,0.875383,0.844631,High confidence from repeated positive listening history
+spotify:track:7IMwEtpAiJanqF6vQteZN2,Turks (with Gunna & ft. Travis Scott),NAV,227,0.85022,0.851794,0.896448,0.838258,0.844451,High confidence from repeated positive listening history
+spotify:track:5ZIZgRrrDj60O0F5oA9bVz,Bad Business,21 Savage,29,1.0,0.943867,0.740387,0.965225,0.843707,High confidence from repeated positive listening history
+spotify:track:5Rv9grENo0PwMFd3ZCT3Zp,I WANNA SEE SOME ASS (feat. jetsonmade),Jack Harlow,45,1.0,0.942471,0.618867,0.969989,0.843107,High confidence from repeated positive listening history
+spotify:track:1E6DEDWDKHoOW0fcFuDghV,Don't Pretend,Khalid,177,0.892655,0.884296,0.699355,0.90258,0.842587,High confidence from repeated positive listening history
+spotify:track:0aj2QKJvz6CePykmlTApiD,Señorita,Justin Timberlake,21,1.0,0.94508,0.800914,0.979057,0.841595,High confidence from repeated positive listening history
+spotify:track:7Lf7oSEVdzZqTA0kEDSlS5,Cry Me a River,Justin Timberlake,95,0.884211,0.877741,0.800914,0.883548,0.841475,High confidence from repeated positive listening history
+spotify:track:4TnjEaWOeW0eKTKIEvJyCa,Falling,Trevor Daniel,57,1.0,0.950047,0.594136,0.950985,0.84141,High confidence from repeated positive listening history
+spotify:track:64yrDBpcdwEdNY9loyEGbX,21 Guns,Green Day,20,1.0,0.954519,0.840816,0.959721,0.840707,High confidence from repeated positive listening history
+spotify:track:75L0qdzRnhwV62UXoNq3pE,Up All Night,Drake,46,1.0,0.942554,0.612242,0.964864,0.840563,High confidence from repeated positive listening history
+spotify:track:0K0vnXPkSrZfO0xpT91jub,Say My Name (feat. IMAN),Digital Farm Animals,142,0.880282,0.876869,0.816303,0.858345,0.840434,High confidence from repeated positive listening history
+spotify:track:1WkMMavIMc4JZ8cfMmxHkI,"CAN'T STOP THE FEELING! (from DreamWorks Animation's ""TROLLS"")",Justin Timberlake,23,1.0,0.948623,0.800914,0.959099,0.840356,High confidence from repeated positive listening history
+spotify:track:1VkRMDuSWrM3ArNloK0YnG,Not Today,Unlike Pluto,47,0.957447,0.924543,0.731232,0.921576,0.839514,High confidence from repeated positive listening history
+spotify:track:6KBYefIoo7KydImq1uUQlL,Bodak Yellow,Cardi B,56,0.892857,0.88309,0.814722,0.901458,0.839284,High confidence from repeated positive listening history
+spotify:track:5g2BFxTdXiMr7TvYW4eL97,Now,BOXINBOX,12,1.0,1.0,1.0,0.943038,0.837956,High confidence from repeated positive listening history
+spotify:track:0Tr1z7FTmr8Yjp8gCgpcmM,The Night,Hendersin,12,1.0,1.0,1.0,0.942643,0.837803,High confidence from repeated positive listening history
+spotify:track:5A1w94uzc1kO1Zhe8WWxC3,Right Back,Khalid,152,0.881579,0.872468,0.699355,0.902154,0.836308,High confidence from repeated positive listening history
+spotify:track:68XhCrBajUR64h6wv4eYYW,I Built A Friend (2020),Alec Benjamin,82,0.853659,0.849952,0.811959,0.895033,0.835802,High confidence from repeated positive listening history
+spotify:track:7ePrKMF7lpHkigDa8AmmyE,Mr. Right Now (feat. Drake),21 Savage,25,1.0,0.937064,0.740387,0.97165,0.835801,High confidence from repeated positive listening history
+spotify:track:3pD0f7hSJg2XdQ6udw5Tey,What Goes Around.../...Comes Around (Interlude),Justin Timberlake,351,0.826211,0.825647,0.800914,0.873442,0.835639,High confidence from repeated positive listening history
+spotify:track:0bMyxvtbPa7HFemLjzw0xX,Young Wheezy (with Gunna),NAV,129,0.829457,0.833369,0.896448,0.84897,0.835572,High confidence from repeated positive listening history
+spotify:track:2ac3BapsIpAVgvt55NMiZd,Dope Shope,Yo Yo Honey Singh,32,1.0,0.935906,0.679529,0.966549,0.835531,High confidence from repeated positive listening history
+spotify:track:4r8JqkhpTb5tzSKKHnVJIJ,Tujhe Bhula Diya,Mohit Chauhan,145,0.855172,0.852167,0.7977,0.87216,0.83471,High confidence from repeated positive listening history
+spotify:track:1db6ixe9nX6cqt2V1DYZnW,Am I High Rn (feat. blackbear),Quinn XCII,29,0.965517,0.92438,0.775256,0.940058,0.83338,High confidence from repeated positive listening history
+spotify:track:04NMWz4ctkuILV6mUR2iWp,Lie,Sasha Alex Sloan,116,0.862069,0.857489,0.791073,0.875874,0.83323,High confidence from repeated positive listening history
+spotify:track:2v6zKkf71lJYTHOmsKo02e,Cartier,Bazzi,35,0.942857,0.907551,0.753088,0.938812,0.832725,High confidence from repeated positive listening history
+spotify:track:6XHVuErjQ4XNm6nDPVCxVX,No Guidance (feat. Drake),Chris Brown,77,0.883117,0.87567,0.803999,0.874908,0.832631,High confidence from repeated positive listening history

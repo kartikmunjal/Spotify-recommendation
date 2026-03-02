@@ -1,0 +1,38 @@
+[
+  {
+    "model": "full_logistic",
+    "status": "ok",
+    "test_auc": 0.8657193177447257,
+    "test_pr_auc": 0.821432896961862,
+    "test_accuracy": 0.7881198682562509,
+    "test_f1": 0.7380645161290323,
+    "test_logloss": 0.45175367335746863
+  },
+  {
+    "model": "baseline_logistic",
+    "status": "ok",
+    "test_auc": 0.8016438792161324,
+    "test_pr_auc": 0.7235553313468064,
+    "test_accuracy": 0.7241267337755717,
+    "test_f1": 0.6615253272623791,
+    "test_logloss": 0.5328346470975406
+  },
+  {
+    "model": "track_artist_heuristic",
+    "status": "ok",
+    "test_auc": 0.5029601272369849,
+    "test_pr_auc": 0.4018826409806286,
+    "test_accuracy": 0.4949900264415271,
+    "test_f1": 0.4156624889294437,
+    "test_logloss": 0.9435194060456707
+  },
+  {
+    "model": "hist_gradient_boosting",
+    "status": "ok",
+    "test_auc": 0.7030739669069486,
+    "test_pr_auc": 0.6106941209451178,
+    "test_accuracy": 0.6905413554761795,
+    "test_f1": 0.5770352523459295,
+    "test_logloss": 0.8300628782490956
+  }
+]

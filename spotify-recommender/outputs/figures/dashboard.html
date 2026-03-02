@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Spotify Recommender Visuals</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 20px; background: #fafafa; }
+    h1 { margin-bottom: 6px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; }
+    img { width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <h1>Spotify Recommender: Visual Analytics</h1>
+  <p>Generated from <code>outputs/scored_samples.csv</code>.</p>
+  <div class='grid'>
+    <div class='card'><h3>Completion Rate by Hour</h3><img src='completion_rate_by_hour.svg' /></div>
+    <div class='card'><h3>Prediction Distribution</h3><img src='prediction_distribution.svg' /></div>
+    <div class='card'><h3>Top Artists Completion</h3><img src='top_artists_completion_rate.svg' /></div>
+    <div class='card'><h3>Platform Mix</h3><img src='platform_mix.svg' /></div>
+  </div>
+</body>
+</html>
