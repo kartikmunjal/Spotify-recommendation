@@ -6,14 +6,14 @@ This repository contains a Spotify listening project that:
 - evaluates results with chronological holdout and rolling backtests
 
 ## What To Read First
-- [Project README](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/README.md)
-- [Technical Brief](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/docs/TECHNICAL_BRIEF.md)
-- [Reproducibility Guide](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/docs/REPRODUCIBILITY.md)
-- [Latest Results](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/RESULTS.md)
-- [Model Comparison](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/model_comparison.csv)
-- [Rolling Backtests](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/rolling_backtests.csv)
-- [Global Recommendations](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/top_resume_playlist.csv)
-- [Favorites-Aware Recommendations](/Users/kartikmunjal/Downloads/spotify/spotify-recommender/outputs/top_favorites_playlist.csv)
+- [Project README](./spotify-recommender/README.md)
+- [Technical Brief](./spotify-recommender/docs/TECHNICAL_BRIEF.md)
+- [Reproducibility Guide](./spotify-recommender/docs/REPRODUCIBILITY.md)
+- [Latest Results](./spotify-recommender/outputs/RESULTS.md)
+- [Model Comparison](./spotify-recommender/outputs/model_comparison.csv)
+- [Rolling Backtests](./spotify-recommender/outputs/rolling_backtests.csv)
+- [Global Recommendations](./spotify-recommender/outputs/top_resume_playlist.csv)
+- [Favorites-Aware Recommendations](./spotify-recommender/outputs/top_favorites_playlist.csv)
 
 ## Current Metrics
 - ROC-AUC: `0.8657`
