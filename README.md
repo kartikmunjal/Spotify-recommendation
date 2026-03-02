@@ -9,11 +9,16 @@ This repository contains a Spotify listening project that:
 - [Project README](./spotify-recommender/README.md)
 - [Technical Brief](./spotify-recommender/docs/TECHNICAL_BRIEF.md)
 - [Reproducibility Guide](./spotify-recommender/docs/REPRODUCIBILITY.md)
-- [Latest Results](./spotify-recommender/outputs/RESULTS.md)
-- [Model Comparison](./spotify-recommender/outputs/model_comparison.csv)
-- [Rolling Backtests](./spotify-recommender/outputs/rolling_backtests.csv)
-- [Global Recommendations](./spotify-recommender/outputs/top_resume_playlist.csv)
-- [Favorites-Aware Recommendations](./spotify-recommender/outputs/top_favorites_playlist.csv)
+
+## Output Artifacts
+`outputs/` is not committed to this public repo (privacy-safe by design).
+
+Generate locally, then review:
+- `outputs/RESULTS.md`
+- `outputs/model_comparison.csv`
+- `outputs/rolling_backtests.csv`
+- `outputs/top_resume_playlist.csv`
+- `outputs/top_favorites_playlist.csv`
 
 ## Current Metrics
 - ROC-AUC: `0.8657`
